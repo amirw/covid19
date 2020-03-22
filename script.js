@@ -1,13 +1,16 @@
 // load data
-var confirmedCsvUrl = 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Confirmed.csv'
-var deathsCsvUrl = 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Deaths.csv'
+var confirmedCsvUrl = 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Confirmed.csv';
+var deathsCsvUrl = 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Deaths.csv';
+var recoveredCsvUrl = 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Recovered.csv';
 
-var dateLabelsArr = []
-var confirmedCasesArr = []
-var deathCasesArr = []
+var dateLabelsArr = [];
+var confirmedCasesArr = [];
+var deathCasesArr = [];
+var recoveredCasesArr = [];
 
 parseCasesCsvUrl(confirmedCsvUrl, dateLabelsArr, confirmedCasesArr);
 parseCasesCsvUrl(deathsCsvUrl, null, deathCasesArr);
+parseCasesCsvUrl(recoveredCsvUrl, null, recoveredCasesArr);
 
 function parseCasesCsvUrl(url, labels, cases) {
     Papa.parse(url, {
@@ -35,8 +38,8 @@ function parseCasesCsvUrl(url, labels, cases) {
 }
 
 function isRelevantDataKey(key) {
-    var startDate = moment("2/21/20", "M/D/YY", true)
-    var thisDate = moment(key, "M/D/YY", true)
+    var startDate = moment("2/21/20", "M/D/YY", true);
+    var thisDate = moment(key, "M/D/YY", true);
     var isDate = thisDate.isValid();
     var isAfterStartDate = thisDate.isSameOrAfter(startDate);
     return isDate && isAfterStartDate;
@@ -44,7 +47,7 @@ function isRelevantDataKey(key) {
 
 // cases Chart
 function drawCasesChart() {
-    if ((dateLabelsArr.length == 0) || (confirmedCasesArr.length == 0) || (deathsCsvUrl.length == 0)) {
+    if ((dateLabelsArr.length == 0) || (confirmedCasesArr.length == 0) || (deathsCsvUrl.length == 0) || (recoveredCsvUrl.length == 0)) {
         return;
     }
 
@@ -66,6 +69,13 @@ function drawCasesChart() {
                 "borderColor":"rgb(187, 17, 0)",
                 "lineTension":0.1,
                 data: deathCasesArr
+            },
+            {
+                "label": "Recovered",
+                "fill":false,
+                "borderColor":"rgb(78, 143, 0)",
+                "lineTension":0.1,
+                data: recoveredCasesArr
             }
             ],
             labels: dateLabelsArr
