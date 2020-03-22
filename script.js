@@ -1,46 +1,73 @@
 // load data
 var confirmedCsvUrl = 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Confirmed.csv'
-Papa.parse(confirmedCsvUrl, {
-    download: true,
-    header: true,
-    skipEmptyLines: true,
-    complete: function(results, file) {
-        var dateLabelsArr = []
-        var confirmedCasesArr = []
-        var relevant = results.data.filter(function(row_data) {
-            return ('Country/Region' in row_data) && (row_data['Country/Region'] == 'Israel')
-        });
-        relevant = relevant[0];
+var deathsCsvUrl = 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Deaths.csv'
 
-        var startDate = moment("2/21/20", "M/D/YY", true)
+var dateLabelsArr = []
+var confirmedCasesArr = []
+var deathCasesArr = []
 
-        for (var key in relevant) {
-            var thisDate = moment(key, "M/D/YY", true)
-            var isDate = thisDate.isValid();
-            var isAfterStartDate = thisDate.isSameOrAfter(startDate);
-            if (isDate && isAfterStartDate) {
-                dateLabelsArr.push(key);
-                confirmedCasesArr.push(parseInt(relevant[key]));
+parseCasesCsvUrl(confirmedCsvUrl, dateLabelsArr, confirmedCasesArr);
+parseCasesCsvUrl(deathsCsvUrl, null, deathCasesArr);
+
+function parseCasesCsvUrl(url, labels, cases) {
+    Papa.parse(url, {
+        download: true,
+        header: true,
+        skipEmptyLines: true,
+        complete: function(results, file) {
+            var my_data = results.data.filter(function(row_data) {
+                return ('Country/Region' in row_data) && (row_data['Country/Region'] == 'Israel')
+            });
+            my_data = my_data[0];
+
+            for (var key in my_data) {
+                if (isRelevantDataKey(key)) {
+                    cases.push(parseInt(my_data[key]));
+                    if (labels != null) {
+                        labels.push(key);
+                    }
+                }
             }
-        }
 
-        drawCasesChart(dateLabelsArr, confirmedCasesArr);
-    }
-})
+            drawCasesChart();
+        }
+    })
+}
+
+function isRelevantDataKey(key) {
+    var startDate = moment("2/21/20", "M/D/YY", true)
+    var thisDate = moment(key, "M/D/YY", true)
+    var isDate = thisDate.isValid();
+    var isAfterStartDate = thisDate.isSameOrAfter(startDate);
+    return isDate && isAfterStartDate;
+}
 
 // cases Chart
-function drawCasesChart(dateLabelsArr, confirmedCasesArr) {
+function drawCasesChart() {
+    if ((dateLabelsArr.length == 0) || (confirmedCasesArr.length == 0) || (deathsCsvUrl.length == 0)) {
+        return;
+    }
+
     var ctx = document.getElementById('casesChart');
     var myLineChart = new Chart(ctx, {
         type: 'line',
         data: {
-            datasets: [{
-                "label":"Confirmed Cases",
+            datasets: [
+            {
+                "label": "Confirmed Cases",
+                "fill":false,
+                "borderColor":"rgb(0, 150, 255)",
+                "lineTension":0.1,
+                data: confirmedCasesArr
+            },
+            {
+                "label": "Deaths",
                 "fill":false,
                 "borderColor":"rgb(187, 17, 0)",
                 "lineTension":0.1,
-                data: confirmedCasesArr
-            }],
+                data: deathCasesArr
+            }
+            ],
             labels: dateLabelsArr
         },
         options: {}
