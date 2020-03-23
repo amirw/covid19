@@ -7,27 +7,41 @@ var dateLabelsArr = [];
 var confirmedCasesArr = [];
 var deathCasesArr = [];
 var recoveredCasesArr = [];
+var confirmedCasesItalyArr = [];
 
-parseCasesCsvUrl(confirmedCsvUrl, dateLabelsArr, confirmedCasesArr);
-parseCasesCsvUrl(deathsCsvUrl, null, deathCasesArr);
-parseCasesCsvUrl(recoveredCsvUrl, null, recoveredCasesArr);
+parseCasesCsvUrl(confirmedCsvUrl, dateLabelsArr, confirmedCasesArr, confirmedCasesItalyArr);
+parseCasesCsvUrl(deathsCsvUrl, null, deathCasesArr, null);
+parseCasesCsvUrl(recoveredCsvUrl, null, recoveredCasesArr, null);
 
-function parseCasesCsvUrl(url, labels, cases) {
+function parseCasesCsvUrl(url, labels, cases, italyCases) {
     Papa.parse(url, {
         download: true,
         header: true,
         skipEmptyLines: true,
         complete: function(results, file) {
-            var my_data = results.data.filter(function(row_data) {
-                return ('Country/Region' in row_data) && (row_data['Country/Region'] == 'Israel')
+            var myData = results.data.filter(function(rowData) {
+                return ('Country/Region' in rowData) && (rowData['Country/Region'] == 'Israel')
             });
-            my_data = my_data[0];
+            myData = myData[0];
 
-            for (var key in my_data) {
+            for (var key in myData) {
                 if (isRelevantDataKey(key)) {
-                    cases.push(parseInt(my_data[key]));
+                    cases.push(parseInt(myData[key]));
                     if (labels != null) {
                         labels.push(key);
+                    }
+                }
+            }
+
+            var italyData = results.data.filter(function(rowData) {
+                return ('Country/Region' in rowData) && (rowData['Country/Region'] == 'Italy')
+            });
+            italyData= italyData[0];
+
+            if (italyCases != null) {
+                for (var key in italyData) {
+                    if (isRelevantDataKey(key)) {
+                        italyCases.push(parseInt(italyData[key]));
                     }
                 }
             }
@@ -52,48 +66,195 @@ function analyzeData() {
         return;
     }
 
-    drawCasesChart();
+    drawTotalCasesChart();
+    drawDailyCasesChart();
     drawGrowthFactorChart();
+
+    drawVsItalyChart();
     displayDoublesIn();
 }
 
-function drawCasesChart() {
-
-    var confirmed = [];
-    var deaths = [];
-    var recovered = [];
-    var dateLabels = [];
-
-    var ctx = document.getElementById('casesChart');
+function drawTotalCasesChart() {
+    var ctx = document.getElementById('totalCasesChart');
     var myLineChart = new Chart(ctx, {
         type: 'line',
         data: {
             datasets: [
             {
                 'label': 'Confirmed Cases',
-                'fill':false,
-                'borderColor':'rgb(0, 150, 255)',
-                'lineTension':0.1,
+                'fill': false,
+                'borderColor': 'rgb(0, 150, 255)',
+                'lineTension': 0.1,
                 data: confirmedCasesArr
             },
             {
                 'label': 'Deaths',
-                'fill':false,
-                'borderColor':'rgb(187, 17, 0)',
-                'lineTension':0.1,
+                'fill': false,
+                'borderColor': 'rgb(187, 17, 0)',
+                'lineTension': 0.1,
                 data: deathCasesArr
             },
             {
                 'label': 'Recovered',
-                'fill':false,
-                'borderColor':'rgb(78, 143, 0)',
-                'lineTension':0.1,
+                'fill': false,
+                'borderColor': 'rgb(78, 143, 0)',
+                'lineTension': 0.1,
                 data: recoveredCasesArr
             }
             ],
             labels: dateLabelsArr
         },
-        options: {}
+        options: {
+            responsive: true,
+            title: {
+                text: 'Local - Total Cases',
+                display: true,
+                fontSize: 40,
+            },
+            scales: {
+                xAxes: [{
+                }],
+                yAxes: [{
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Cases',
+                        fontSize: 20
+                    },
+                }]
+            }
+        }
+    });
+}
+
+function drawDailyCasesChart() {
+    var totalOpenCases = []
+    for (var i = 0; i < confirmedCasesArr.length; i++) {
+        totalOpenCases.push(confirmedCasesArr[i] - deathCasesArr[i] - recoveredCasesArr[i]);
+    }
+
+    var dailyOpenCases = []
+    var dailyDeaths = []
+    var dailyRecoveries = []
+
+    for (var i = 1; i < confirmedCasesArr.length; i++) {
+        dailyOpenCases.push(totalOpenCases[i] - totalOpenCases[i - 1]);
+        dailyDeaths.push(deathCasesArr[i] - deathCasesArr[i - 1]);
+        dailyRecoveries.push(recoveredCasesArr[i] - recoveredCasesArr[i - 1]);
+    }
+
+
+    var ctx = document.getElementById('dailyCasesChart');
+    var myLineChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            datasets: [
+            {
+                'label': 'Open',
+                'backgroundColor': 'rgb(0, 150, 255, 0.2)',
+                'borderColor': 'rgb(0, 150, 255)',
+                data: dailyOpenCases
+            },
+            {
+                'label': 'Deaths',
+                'backgroundColor': 'rgb(187, 17, 0, 0.2)',
+                'borderColor': 'rgb(187, 17, 0)',
+                data: dailyDeaths
+            },
+            {
+                'label': 'Recovered',
+                'backgroundColor': 'rgb(78, 143, 0, 0.2)',
+                'borderColor': 'rgb(78, 143, 0)',
+                data: dailyRecoveries
+            }
+            ],
+            labels: dateLabelsArr.slice(1)
+        },
+        options: {
+            responsive: true,
+            title: {
+                text: 'Local - Daily Cases',
+                display: true,
+                fontSize: 40,
+            },
+            scales: {
+                xAxes: [{
+                    stacked: true
+                }],
+                yAxes: [{
+                    stacked: true,
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Cases',
+                        fontSize: 20
+                    },
+                }]
+            }
+        }
+    });
+}
+
+function drawVsItalyChart() {
+    var threshold = 60;
+
+    var localFirstIndex = confirmedCasesArr.findIndex(function(val) {
+        return val >= threshold;
+    });
+    var localData = confirmedCasesArr.slice(localFirstIndex);
+
+    var italyFirstIndex = confirmedCasesItalyArr.findIndex(function(val) {
+        return val >= threshold;
+    });
+    var italyData = confirmedCasesItalyArr.slice(italyFirstIndex);
+    italyData = italyData.slice(0, localData.length);
+
+    var daysSince = [...Array(localData.length).keys()]
+
+    var ctx = document.getElementById('vsItalyChart');
+    var myLineChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            datasets: [
+            {
+                'label': 'Local',
+                'fill': false,
+                'borderColor': 'rgb(0, 150, 255)',
+                'lineTension': 0.1,
+                data: localData
+            },
+            {
+                'label': 'Italy',
+                'fill': false,
+                'borderColor':'rgb(187, 17, 0)',
+                'lineTension': 0.1,
+                data: italyData
+            }
+            ],
+            labels: daysSince
+        },
+        options: {
+            responsive: true,
+            title: {
+                text: 'vs. Italy',
+                display: true,
+                fontSize: 20,
+            },
+            scales: {
+                xAxes: [{
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Days since ' + threshold + ' cases',
+                        fontSize: 20
+                    },
+                }],
+                yAxes: [{
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Cases',
+                        fontSize: 20
+                    },
+                }]
+            }
+        }
     });
 }
 
@@ -116,7 +277,7 @@ function drawGrowthFactorChart() {
         data: {
             datasets: [
             {
-                'label': 'Momentary Growth Factor',
+                'label': 'Growth Factor',
                 'fill': false,
                 'borderColor': 'rgb(0, 150, 255)',
                 'lineTension': 0.1,
@@ -128,28 +289,49 @@ function drawGrowthFactorChart() {
                 'borderColor':'rgb(187, 17, 0)',
                 'lineTension': 0.1,
                 'pointRadius': 0,
-                'borderDash': [5, 15],
+                'borderDash': [10, 5],
                 data: criticalGrowthFactorArr
             }
             ],
-            labels: dateLabelsArr.splice(2)
+            labels: dateLabelsArr.slice(2)
         },
-        options: {}
+        options: {
+            responsive: true,
+            title: {
+                text: 'Growth Factor',
+                display: true,
+                fontSize: 20,
+            },
+            scales: {
+                xAxes: [{
+                }],
+                yAxes: [{
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Growth Factor',
+                        fontSize: 20
+                    },
+                }]
+            }
+        }
     });
 }
 
 function displayDoublesIn() {
-    numCasesToConsider = 7;
-    recentConfirmedCases = confirmedCasesArr.slice(-numCasesToConsider);
-    size = recentConfirmedCases.length;
-    first = recentConfirmedCases[0];
-    last = recentConfirmedCases[recentConfirmedCases.length - 1];
-    meanMultiplier = Math.pow(last / first, 1 / size);
+    var numCasesToConsider = 7;
+    var recentConfirmedCases = confirmedCasesArr.slice(-numCasesToConsider);
+    var size = recentConfirmedCases.length;
+    var first = recentConfirmedCases[0];
+    var last = recentConfirmedCases[recentConfirmedCases.length - 1];
+    var meanMultiplier = Math.pow(last / first, 1 / size);
 
-    daysToDouble = Math.log(2) / Math.log(meanMultiplier);
+    var daysToDouble = Math.log(2) / Math.log(meanMultiplier);
 
-    div = document.getElementById('daysToDouble');
+    var div = document.getElementById('daysToDouble');
     div.innerHTML = daysToDouble.toFixed(1);
+
+    div = document.getElementById('daysToDoubleTitle');
+    div.innerHTML = 'Days to Double'
 }
 
 function convertTotalCasesToDailyCases(totalCasesArr) {

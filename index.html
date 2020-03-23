@@ -17,14 +17,21 @@
 <body>
     <div class="wrapper">
 
-        <div class="cases_chart_wrapper">
-            <canvas id="casesChart"></canvas>
+        <div class="total_cases_chart_wrapper">
+            <canvas id="totalCasesChart"></canvas>
+        </div>
+
+        <div class="daily_cases_chart_wrapper">
+            <canvas id="dailyCasesChart"></canvas>
+        </div>
+
+        <div class="vs_italy_wrapper">
+            <canvas id="vsItalyChart"></canvas>
         </div>
 
         <div class="days_to_double_wrapper">
-            <div> Days to Double </div>
-            <div id="daysToDouble"></div>
-
+            <div id="daysToDoubleTitle" class="sectionTitle"></div>
+            <div id="daysToDouble" class="bigNumber colorRed"></div>
         </div>
 
         <div class="growth_rate_chart_wrapper">
@@ -33,6 +40,15 @@
 
     </div>
     <script src="script.js"> </script>
+
+    <footer>
+        <p>Created by: Amir Watad</p>
+        <p>
+            <a href="https://github.com/CSSEGISandData/COVID-19/tree/master/csse_covid_19_data">Raw data</a>
+            from Center for System Science and Engineering (CSSE) at John Hopkins University
+        </p>
+    </footer>
+
 </body>
 
 </html>
