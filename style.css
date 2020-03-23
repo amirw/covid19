@@ -64,6 +64,10 @@ footer {
     padding: 60px;
 }
 
+p.rtl {
+    direction: rtl;
+}
+
 #casesChart {
     width: 100% !important;
 }

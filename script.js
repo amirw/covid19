@@ -81,21 +81,21 @@ function drawTotalCasesChart() {
         data: {
             datasets: [
             {
-                'label': 'Confirmed Cases',
+                'label': 'مصابون',
                 'fill': false,
                 'borderColor': 'rgb(0, 150, 255)',
                 'lineTension': 0.1,
                 data: confirmedCasesArr
             },
             {
-                'label': 'Deaths',
+                'label': 'وفيات',
                 'fill': false,
                 'borderColor': 'rgb(187, 17, 0)',
                 'lineTension': 0.1,
                 data: deathCasesArr
             },
             {
-                'label': 'Recovered',
+                'label': 'معافون',
                 'fill': false,
                 'borderColor': 'rgb(78, 143, 0)',
                 'lineTension': 0.1,
@@ -107,7 +107,7 @@ function drawTotalCasesChart() {
         options: {
             responsive: true,
             title: {
-                text: 'Local - Total Cases',
+                text: 'مجمل الحالات',
                 display: true,
                 fontSize: 40,
             },
@@ -117,7 +117,7 @@ function drawTotalCasesChart() {
                 yAxes: [{
                     scaleLabel: {
                         display: true,
-                        labelString: 'Cases',
+                        labelString: 'عدد الحالات',
                         fontSize: 20
                     },
                 }]
@@ -149,20 +149,20 @@ function drawDailyCasesChart() {
         data: {
             datasets: [
             {
-                'label': 'Open',
-                'backgroundColor': 'rgb(0, 150, 255, 0.2)',
+                'label': 'مصابون قيد المرض',
+                'backgroundColor': 'rgb(0, 150, 255, 0.4)',
                 'borderColor': 'rgb(0, 150, 255)',
                 data: dailyOpenCases
             },
             {
-                'label': 'Deaths',
-                'backgroundColor': 'rgb(187, 17, 0, 0.2)',
+                'label': 'وفيات',
+                'backgroundColor': 'rgb(187, 17, 0, 0.4)',
                 'borderColor': 'rgb(187, 17, 0)',
                 data: dailyDeaths
             },
             {
-                'label': 'Recovered',
-                'backgroundColor': 'rgb(78, 143, 0, 0.2)',
+                'label': 'معافون',
+                'backgroundColor': 'rgb(78, 143, 0, 0.4)',
                 'borderColor': 'rgb(78, 143, 0)',
                 data: dailyRecoveries
             }
@@ -172,7 +172,7 @@ function drawDailyCasesChart() {
         options: {
             responsive: true,
             title: {
-                text: 'Local - Daily Cases',
+                text: 'حالات جديدة',
                 display: true,
                 fontSize: 40,
             },
@@ -184,7 +184,7 @@ function drawDailyCasesChart() {
                     stacked: true,
                     scaleLabel: {
                         display: true,
-                        labelString: 'Cases',
+                        labelString: 'عدد الحالات',
                         fontSize: 20
                     },
                 }]
@@ -215,14 +215,14 @@ function drawVsItalyChart() {
         data: {
             datasets: [
             {
-                'label': 'Local',
+                'label': 'البلاد',
                 'fill': false,
                 'borderColor': 'rgb(0, 150, 255)',
                 'lineTension': 0.1,
                 data: localData
             },
             {
-                'label': 'Italy',
+                'label': 'إيطاليا',
                 'fill': false,
                 'borderColor':'rgb(187, 17, 0)',
                 'lineTension': 0.1,
@@ -234,7 +234,7 @@ function drawVsItalyChart() {
         options: {
             responsive: true,
             title: {
-                text: 'vs. Italy',
+                text: 'مقارنة مع إيطاليا',
                 display: true,
                 fontSize: 20,
             },
@@ -242,14 +242,14 @@ function drawVsItalyChart() {
                 xAxes: [{
                     scaleLabel: {
                         display: true,
-                        labelString: 'Days since ' + threshold + ' cases',
+                        labelString: ' أيام مرت منذ كان هناك ' + threshold + ' حالة',
                         fontSize: 20
                     },
                 }],
                 yAxes: [{
                     scaleLabel: {
                         display: true,
-                        labelString: 'Cases',
+                        labelString: 'عدد الحالات الكلي',
                         fontSize: 20
                     },
                 }]
@@ -277,14 +277,14 @@ function drawGrowthFactorChart() {
         data: {
             datasets: [
             {
-                'label': 'Growth Factor',
+                'label': 'عامل النمو',
                 'fill': false,
                 'borderColor': 'rgb(0, 150, 255)',
                 'lineTension': 0.1,
                 data: growthFactorArr
             },
             {
-                'label': 'Critical Growth Factor',
+                'label': 'عامل النمو الحرج',
                 'fill': false,
                 'borderColor':'rgb(187, 17, 0)',
                 'lineTension': 0.1,
@@ -298,7 +298,7 @@ function drawGrowthFactorChart() {
         options: {
             responsive: true,
             title: {
-                text: 'Growth Factor',
+                text: 'عامل النمو',
                 display: true,
                 fontSize: 20,
             },
@@ -308,7 +308,7 @@ function drawGrowthFactorChart() {
                 yAxes: [{
                     scaleLabel: {
                         display: true,
-                        labelString: 'Growth Factor',
+                        labelString: 'عامل النمو',
                         fontSize: 20
                     },
                 }]
@@ -331,7 +331,7 @@ function displayDoublesIn() {
     div.innerHTML = daysToDouble.toFixed(1);
 
     div = document.getElementById('daysToDoubleTitle');
-    div.innerHTML = 'Days to Double'
+    div.innerHTML = 'أيام حتى مضاعفة عدد الحالات'
 }
 
 function convertTotalCasesToDailyCases(totalCasesArr) {
