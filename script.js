@@ -107,7 +107,7 @@ function drawTotalCasesChart() {
         options: {
             responsive: true,
             title: {
-                text: 'مجمل الحالات',
+                text: 'مجمل الحالات في البلاد',
                 display: true,
                 fontSize: 40,
             },
@@ -172,7 +172,7 @@ function drawDailyCasesChart() {
         options: {
             responsive: true,
             title: {
-                text: 'حالات جديدة',
+                text: 'حالات جديدة في البلاد',
                 display: true,
                 fontSize: 40,
             },
