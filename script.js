@@ -39,7 +39,7 @@ function parseCasesCsvUrl(url, labels, cases) {
 }
 
 function isRelevantDataKey(key) {
-    var startDate = moment('2/21/20', 'M/D/YY', true);
+    var startDate = moment('2/20/20', 'M/D/YY', true);
     var thisDate = moment(key, 'M/D/YY', true);
     var isDate = thisDate.isValid();
     var isAfterStartDate = thisDate.isSameOrAfter(startDate);
@@ -53,11 +53,17 @@ function analyzeData() {
     }
 
     drawCasesChart();
-
-    drawGrowthRateChart();
+    drawGrowthFactorChart();
+    displayDoublesIn();
 }
 
 function drawCasesChart() {
+
+    var confirmed = [];
+    var deaths = [];
+    var recovered = [];
+    var dateLabels = [];
+
     var ctx = document.getElementById('casesChart');
     var myLineChart = new Chart(ctx, {
         type: 'line',
@@ -91,48 +97,68 @@ function drawCasesChart() {
     });
 }
 
-function drawGrowthRateChart() {
-    var growthRateArr = []
-    for (var i = 1; i < confirmedCasesArr.length; i++) {
-        if (confirmedCasesArr[i - 1] == 0) {
-            growthRateArr[i - 1] = 1;
+function drawGrowthFactorChart() {
+    var dailyCases = convertTotalCasesToDailyCases(confirmedCasesArr);
+    var growthFactorArr = []
+    for (var i = 1; i < dailyCases.length; i++) {
+        if (dailyCases[i - 1] == 0) {
+            growthFactorArr[i - 1] = 1;
         } else {
-            growthRateArr[i - 1] = confirmedCasesArr[i] / confirmedCasesArr[i - 1];
+            growthFactorArr[i - 1] = dailyCases[i] / dailyCases[i - 1];
         }
     }
 
-    meanGrowthRate = mean(growthRateArr);
-    meanGrowthRateArr = Array(growthRateArr.length).fill(meanGrowthRate);
+    criticalGrowthFactorArr = Array(growthFactorArr.length).fill(1);
 
-    console.log(meanGrowthRateArr);
-    console.log(growthRateArr);
-
-    var ctx = document.getElementById('growthRateChart');
+    var ctx = document.getElementById('growthFactorChart');
     var myLineChart = new Chart(ctx, {
         type: 'line',
         data: {
             datasets: [
             {
-                'label': 'Momentary Growth Rate',
+                'label': 'Momentary Growth Factor',
                 'fill': false,
                 'borderColor': 'rgb(0, 150, 255)',
                 'lineTension': 0.1,
-                data: growthRateArr
+                data: growthFactorArr
             },
             {
-                'label': 'Mean Growth Rate',
+                'label': 'Critical Growth Factor',
                 'fill': false,
                 'borderColor':'rgb(187, 17, 0)',
                 'lineTension': 0.1,
                 'pointRadius': 0,
                 'borderDash': [5, 15],
-                data: meanGrowthRateArr
+                data: criticalGrowthFactorArr
             }
             ],
-            labels: dateLabelsArr.splice(1)
+            labels: dateLabelsArr.splice(2)
         },
         options: {}
     });
+}
+
+function displayDoublesIn() {
+    numCasesToConsider = 7;
+    recentConfirmedCases = confirmedCasesArr.slice(-numCasesToConsider);
+    size = recentConfirmedCases.length;
+    first = recentConfirmedCases[0];
+    last = recentConfirmedCases[recentConfirmedCases.length - 1];
+    meanMultiplier = Math.pow(last / first, 1 / size);
+
+    daysToDouble = Math.log(2) / Math.log(meanMultiplier);
+
+    div = document.getElementById('daysToDouble');
+    div.innerHTML = daysToDouble.toFixed(1);
+}
+
+function convertTotalCasesToDailyCases(totalCasesArr) {
+    daily = [];
+    for (var i = 1; i < totalCasesArr.length; i++) {
+        daily[i - 1] = totalCasesArr[i] - totalCasesArr[i - 1];
+    }
+
+    return daily;
 }
 
 function mean(arr) {
