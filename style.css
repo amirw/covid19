@@ -94,12 +94,12 @@ p.rtl {
     width: 100% !important;
 }
 
-.tooltip {
+.tooltip_wrapper {
     position: relative;
     display: inline-block;
 }
 
-.tooltip .tooltiptext {
+.tooltip_wrapper .tooltiptext {
     visibility: hidden;
     width: 120px;
     background-color: black;
@@ -116,6 +116,6 @@ p.rtl {
     right: 105%; 
 }
 
-.tooltip:hover .tooltiptext {
+.tooltip_wrapper:hover .tooltiptext {
     visibility: visible;
 }
