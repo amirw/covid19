@@ -264,7 +264,7 @@ function drawVsWorldChart(casesData) {
                 xAxes: [{
                     scaleLabel: {
                         display: true,
-                        labelString: ' أيام مرت منذ كان هناك ' + threshold + ' حالة',
+                        labelString: ' أيام مرت منذ كانت هناك ' + threshold + ' حالة',
                         fontSize: 20
                     },
                 }],
