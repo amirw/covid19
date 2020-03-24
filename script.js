@@ -1,7 +1,7 @@
 // load data
-var confirmedCsvUrl = 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Confirmed.csv';
-var deathsCsvUrl = 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Deaths.csv';
-var recoveredCsvUrl = 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Recovered.csv';
+var confirmedCsvUrl = 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv';
+var deathsCsvUrl = 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_global.csv';
+var recoveredCsvUrl = '';
 
 var dateLabelsArr = [];
 var confirmedCasesArr = [];
@@ -11,7 +11,6 @@ var confirmedCasesItalyArr = [];
 
 parseCasesCsvUrl(confirmedCsvUrl, dateLabelsArr, confirmedCasesArr, confirmedCasesItalyArr);
 parseCasesCsvUrl(deathsCsvUrl, null, deathCasesArr, null);
-parseCasesCsvUrl(recoveredCsvUrl, null, recoveredCasesArr, null);
 
 function parseCasesCsvUrl(url, labels, cases, italyCases) {
     Papa.parse(url, {
@@ -62,7 +61,7 @@ function isRelevantDataKey(key) {
 
 // cases Chart
 function analyzeData() {
-    if ((dateLabelsArr.length == 0) || (confirmedCasesArr.length == 0) || (deathCasesArr.length == 0) || (recoveredCasesArr.length == 0)) {
+    if ((dateLabelsArr.length == 0) || (confirmedCasesArr.length == 0) || (deathCasesArr.length == 0)) {
         return;
     }
 
@@ -93,13 +92,6 @@ function drawTotalCasesChart() {
                 'borderColor': 'rgb(187, 17, 0)',
                 'lineTension': 0.1,
                 data: deathCasesArr
-            },
-            {
-                'label': 'معافون',
-                'fill': false,
-                'borderColor': 'rgb(78, 143, 0)',
-                'lineTension': 0.1,
-                data: recoveredCasesArr
             }
             ],
             labels: dateLabelsArr
@@ -129,17 +121,15 @@ function drawTotalCasesChart() {
 function drawDailyCasesChart() {
     var totalOpenCases = []
     for (var i = 0; i < confirmedCasesArr.length; i++) {
-        totalOpenCases.push(confirmedCasesArr[i] - deathCasesArr[i] - recoveredCasesArr[i]);
+        totalOpenCases.push(confirmedCasesArr[i] - deathCasesArr[i]);
     }
 
     var dailyOpenCases = []
     var dailyDeaths = []
-    var dailyRecoveries = []
 
     for (var i = 1; i < confirmedCasesArr.length; i++) {
         dailyOpenCases.push(totalOpenCases[i] - totalOpenCases[i - 1]);
         dailyDeaths.push(deathCasesArr[i] - deathCasesArr[i - 1]);
-        dailyRecoveries.push(recoveredCasesArr[i] - recoveredCasesArr[i - 1]);
     }
 
 
@@ -149,7 +139,7 @@ function drawDailyCasesChart() {
         data: {
             datasets: [
             {
-                'label': 'مصابون قيد المرض',
+                'label': 'مصابون أحياء (مرضى أو تعافوا)',
                 'backgroundColor': 'rgb(0, 150, 255, 0.4)',
                 'borderColor': 'rgb(0, 150, 255)',
                 data: dailyOpenCases
@@ -159,12 +149,6 @@ function drawDailyCasesChart() {
                 'backgroundColor': 'rgb(187, 17, 0, 0.4)',
                 'borderColor': 'rgb(187, 17, 0)',
                 data: dailyDeaths
-            },
-            {
-                'label': 'معافون',
-                'backgroundColor': 'rgb(78, 143, 0, 0.4)',
-                'borderColor': 'rgb(78, 143, 0)',
-                data: dailyRecoveries
             }
             ],
             labels: dateLabelsArr.slice(1)
