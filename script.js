@@ -350,27 +350,11 @@ function drawGrowthFactorChart(casesData) {
     });
 
     var periodForMeanGrowthFactor = 7;
-    var periodDailyCases = dailyCases.slice(-periodForMeanGrowthFactor);
-
-    var weekStart = periodDailyCases[0];
-    var weekEnd = periodDailyCases[periodDailyCases.length - 1];
-    var weekLength = periodDailyCases.length;
-
-    if (weekStart == 0) {
-        for (var i = 0; i < periodDailyCases.length - 1; i++)
-        if (periodDailyCases[i] != 0) {
-            weekStart = periodDailyCases[i];
-            weekLength -= i;
-            break;
-        }
-    }
-
-    var meanGrowthFactor;
-    if (weekEnd == 0) {
-        meanGrowthFactor = 0;
-    } else {
-        meanGrowthFactor = Math.pow(weekEnd / weekStart, 1 / (weekLength - 1));
-    }
+    var relevantGrowthFactors = growthFactorArr.slice(-periodForMeanGrowthFactor);
+    relevantGrowthFactors = relevantGrowthFactors.filter(function(val) {
+        return (val != 0) && (val != Infinity);
+    });
+    var meanGrowthFactor = geometricMean(relevantGrowthFactors);
 
     var div = document.getElementById('meanGrowthFactor');
     div.innerHTML = meanGrowthFactor.toFixed(1);
@@ -426,6 +410,19 @@ function convertTotalCasesToDailyCases(totalCasesArr) {
 }
 
 function mean(arr) {
-    var sum = arr.reduce((prev, curr) => prev += curr);
+    if (arr.length == 0) {
+        return 0;
+    }
+
+    var sum = arr.reduce((prev, curr) => prev + curr);
     return sum / arr.length;
+}
+
+function geometricMean(arr) {
+    if (arr.length == 0) {
+        return 0;
+    }
+
+    var prod = arr.reduce((prev, curr) => prev * curr);
+    return Math.pow(prod, 1 / arr.length);
 }
