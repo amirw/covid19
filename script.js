@@ -114,7 +114,7 @@ function drawTotalCasesChart(casesData) {
             responsive: true,
             title: {
                 text: 'مجمل الحالات في البلاد',
-                display: true,
+                display: false,
                 fontSize: 40,
             },
             scales: {
@@ -171,7 +171,7 @@ function drawDailyCasesChart(casesData) {
             responsive: true,
             title: {
                 text: 'حالات جديدة في البلاد',
-                display: true,
+                display: false,
                 fontSize: 40,
             },
             scales: {
@@ -257,7 +257,7 @@ function drawVsWorldChart(casesData) {
             responsive: true,
             title: {
                 text: 'مقارنة مع بلاد أخرى',
-                display: true,
+                display: false,
                 fontSize: 20,
             },
             scales: {
@@ -332,7 +332,7 @@ function drawGrowthFactorChart(casesData) {
             responsive: true,
             title: {
                 text: 'عامل النمو',
-                display: true,
+                display: false,
                 fontSize: 20,
             },
             scales: {
@@ -364,9 +364,6 @@ function drawGrowthFactorChart(casesData) {
     } else {
         div.classList.add('colorRed');
     }
-
-    div = document.getElementById('meanGrowthFactorTitle');
-    div.innerHTML = 'متوسط عامل النمو (في الأسبوع الأخير)';
 }
 
 function displayDoublesIn(casesData) {
@@ -387,17 +384,6 @@ function displayDoublesIn(casesData) {
 
     div = document.getElementById('nextWeekCases');
     div.innerHTML = (last * Math.pow(meanMultiplier, 7)).toFixed(0);
-
-
-    div = document.getElementById('daysToDoubleTitle');
-    div.innerHTML = 'أيام حتى مضاعفة عدد الحالات'
-
-    div = document.getElementById('currentCasesTitle');
-    div.innerHTML = 'عدد الحالات الحالي';
-
-    div = document.getElementById('nextWeekTitle');
-    div.innerHTML = 'عدد الحالات المتوقع بعد أسبوع';
-
 }
 
 function convertTotalCasesToDailyCases(totalCasesArr) {
