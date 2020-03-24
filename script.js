@@ -323,7 +323,7 @@ function displayDoublesIn() {
     var size = recentConfirmedCases.length;
     var first = recentConfirmedCases[0];
     var last = recentConfirmedCases[recentConfirmedCases.length - 1];
-    var meanMultiplier = Math.pow(last / first, 1 / size);
+    var meanMultiplier = Math.pow(last / first, 1 / (size - 1));
 
     var daysToDouble = Math.log(2) / Math.log(meanMultiplier);
 
