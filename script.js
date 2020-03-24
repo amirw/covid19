@@ -1,55 +1,83 @@
 // load data
-var confirmedCsvUrl = 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv';
-var deathsCsvUrl = 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_global.csv';
-var recoveredCsvUrl = '';
+var gConfirmedCsvUrl = 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv';
+var gDeathsCsvUrl = 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_global.csv';
 
-var dateLabelsArr = [];
-var confirmedCasesArr = [];
-var deathCasesArr = [];
-var recoveredCasesArr = [];
-var confirmedCasesItalyArr = [];
+var gCsvData = {'confirmed': null, 'deaths': null};
 
-parseCasesCsvUrl(confirmedCsvUrl, dateLabelsArr, confirmedCasesArr, confirmedCasesItalyArr);
-parseCasesCsvUrl(deathsCsvUrl, null, deathCasesArr, null);
+getCasesCsvUrl(gConfirmedCsvUrl, 'confirmed', gCsvData);
+getCasesCsvUrl(gDeathsCsvUrl, 'deaths', gCsvData);
 
-function parseCasesCsvUrl(url, labels, cases, italyCases) {
+function getCasesCsvUrl(url, key, data) {
     Papa.parse(url, {
         download: true,
         header: true,
         skipEmptyLines: true,
         complete: function(results, file) {
-            var myData = results.data.filter(function(rowData) {
-                return ('Country/Region' in rowData) && (rowData['Country/Region'] == 'Israel')
+            gCsvData[key] = results.data;
+
+            analyzeData(gCsvData);
+
+        }
+    })
+}
+
+function analyzeData(csvData) {
+    if ((csvData['confirmed'] == null) || (csvData['deaths'] == null)) {
+        return;
+    }
+    
+    var casesData = {
+                      'dates': [],
+                      'countries':
+                        {
+                            'local': {'confirmed': [], 'deaths': []},
+                            'Italy': {'confirmed': [], 'deaths': []},
+                            'Spain': {'confirmed': [], 'deaths': []},
+                            'Germany': {'confirmed': [], 'deaths': []},
+                            'Korea, South': {'confirmed': [], 'deaths': []}
+                        }
+                    };
+
+    extractCasesData(csvData, casesData);
+
+    
+    drawTotalCasesChart(casesData);
+    drawDailyCasesChart(casesData);
+    drawGrowthFactorChart(casesData);
+
+    drawVsWorldChart(casesData);
+
+    displayDoublesIn(casesData);
+}
+
+function extractCasesData(csvData, casesData) {
+    
+    var extractDates = true;
+    var caseTypes = ['confirmed', 'deaths'];
+
+    for (iCaseType = 0; iCaseType < caseTypes.length; iCaseType++) {
+        caseType = caseTypes[iCaseType];
+
+        for (country in casesData['countries']) {
+            var myData = csvData[caseType].filter(function(rowData) {
+                var countryCompare = (country == 'local') ? 'Israel' : country;
+                return ('Country/Region' in rowData) && (rowData['Country/Region'] == countryCompare);
             });
             myData = myData[0];
 
             for (var key in myData) {
                 if (isRelevantDataKey(key)) {
-                    cases.push(parseInt(myData[key]));
-                    if (labels != null) {
-                        labels.push(key);
+                    casesData['countries'][country][caseType].push(parseInt(myData[key]));
+                    if (extractDates) {
+                        casesData['dates'].push(key);
                     }
                 }
             }
 
-            var italyData = results.data.filter(function(rowData) {
-                return ('Country/Region' in rowData) && (rowData['Country/Region'] == 'Italy')
-            });
-            italyData= italyData[0];
-
-            if (italyCases != null) {
-                for (var key in italyData) {
-                    if (isRelevantDataKey(key)) {
-                        italyCases.push(parseInt(italyData[key]));
-                    }
-                }
-            }
-
-            analyzeData();
-
+            extractDates = false;
         }
-    })
-}
+    }
+} 
 
 function isRelevantDataKey(key) {
     var startDate = moment('2/20/20', 'M/D/YY', true);
@@ -59,21 +87,7 @@ function isRelevantDataKey(key) {
     return isDate && isAfterStartDate;
 }
 
-// cases Chart
-function analyzeData() {
-    if ((dateLabelsArr.length == 0) || (confirmedCasesArr.length == 0) || (deathCasesArr.length == 0)) {
-        return;
-    }
-
-    drawTotalCasesChart();
-    drawDailyCasesChart();
-    drawGrowthFactorChart();
-
-    drawVsItalyChart();
-    displayDoublesIn();
-}
-
-function drawTotalCasesChart() {
+function drawTotalCasesChart(casesData) {
     var ctx = document.getElementById('totalCasesChart');
     var myLineChart = new Chart(ctx, {
         type: 'line',
@@ -84,17 +98,17 @@ function drawTotalCasesChart() {
                 'fill': false,
                 'borderColor': 'rgb(0, 150, 255)',
                 'lineTension': 0.1,
-                data: confirmedCasesArr
+                data: casesData['countries']['local']['confirmed']
             },
             {
                 'label': 'وفيات',
                 'fill': false,
                 'borderColor': 'rgb(187, 17, 0)',
                 'lineTension': 0.1,
-                data: deathCasesArr
+                data: casesData['countries']['local']['deaths']
             }
             ],
-            labels: dateLabelsArr
+            labels: casesData['dates']
         },
         options: {
             responsive: true,
@@ -118,18 +132,18 @@ function drawTotalCasesChart() {
     });
 }
 
-function drawDailyCasesChart() {
+function drawDailyCasesChart(casesData) {
     var totalOpenCases = []
-    for (var i = 0; i < confirmedCasesArr.length; i++) {
-        totalOpenCases.push(confirmedCasesArr[i] - deathCasesArr[i]);
+    for (var i = 0; i < casesData['countries']['local']['confirmed'].length; i++) {
+        totalOpenCases.push(casesData['countries']['local']['confirmed'][i] - casesData['countries']['local']['deaths'][i]);
     }
 
     var dailyOpenCases = []
     var dailyDeaths = []
 
-    for (var i = 1; i < confirmedCasesArr.length; i++) {
+    for (var i = 1; i < casesData['countries']['local']['confirmed'].length; i++) {
         dailyOpenCases.push(totalOpenCases[i] - totalOpenCases[i - 1]);
-        dailyDeaths.push(deathCasesArr[i] - deathCasesArr[i - 1]);
+        dailyDeaths.push(casesData['countries']['local']['deaths'][i] - casesData['countries']['local']['deaths'][i - 1]);
     }
 
 
@@ -151,7 +165,7 @@ function drawDailyCasesChart() {
                 data: dailyDeaths
             }
             ],
-            labels: dateLabelsArr.slice(1)
+            labels: casesData['dates'].slice(1)
         },
         options: {
             responsive: true,
@@ -177,23 +191,25 @@ function drawDailyCasesChart() {
     });
 }
 
-function drawVsItalyChart() {
-    var threshold = 60;
+function drawVsWorldChart(casesData) {
+    var threshold = 100; //number of patients to start from
 
-    var localFirstIndex = confirmedCasesArr.findIndex(function(val) {
+    var localFirstIndex = casesData['countries']['local']['confirmed'].findIndex(function(val) {
         return val >= threshold;
     });
-    var localData = confirmedCasesArr.slice(localFirstIndex);
+    var localData = casesData['countries']['local']['confirmed'].slice(localFirstIndex);
+    var series_size = localData.length;
 
-    var italyFirstIndex = confirmedCasesItalyArr.findIndex(function(val) {
-        return val >= threshold;
-    });
-    var italyData = confirmedCasesItalyArr.slice(italyFirstIndex);
-    italyData = italyData.slice(0, localData.length);
+    countriesData = {};
+    for (country in casesData['countries']) {
+        if (country != 'local') {
+            countriesData[country] = getOtherCountryCases(threshold, casesData['countries'][country]['confirmed'], series_size);
+        }
+    }
 
-    var daysSince = [...Array(localData.length).keys()]
+    var daysSince = [...Array(series_size).keys()]
 
-    var ctx = document.getElementById('vsItalyChart');
+    var ctx = document.getElementById('vsWorldChart');
     var myLineChart = new Chart(ctx, {
         type: 'line',
         data: {
@@ -201,24 +217,46 @@ function drawVsItalyChart() {
             {
                 'label': 'البلاد',
                 'fill': false,
-                'borderColor': 'rgb(0, 150, 255)',
+                'borderColor': 'rgb(0, 0, 0)',
                 'lineTension': 0.1,
+                'borderWidth': 6,
                 data: localData
             },
             {
                 'label': 'إيطاليا',
                 'fill': false,
+                'borderColor':'rgb(72, 237, 10)',
+                'lineTension': 0.1,
+                data: countriesData['Italy']
+            },
+            {
+                'label': 'إسبانيا',
+                'fill': false,
                 'borderColor':'rgb(187, 17, 0)',
                 'lineTension': 0.1,
-                data: italyData
-            }
+                data: countriesData['Spain']
+            },
+            {
+                'label': 'ألمانيا',
+                'fill': false,
+                'borderColor':'rgb(235, 153, 48)',
+                'lineTension': 0.1,
+                data: countriesData['Germany']
+            },
+            {
+                'label': 'كوريا الجنوبية',
+                'fill': false,
+                'borderColor':'rgb(40, 156, 235)',
+                'lineTension': 0.1,
+                data: countriesData['Korea, South']
+            },
             ],
             labels: daysSince
         },
         options: {
             responsive: true,
             title: {
-                text: 'مقارنة مع إيطاليا',
+                text: 'مقارنة مع بلاد أخرى',
                 display: true,
                 fontSize: 20,
             },
@@ -242,8 +280,19 @@ function drawVsItalyChart() {
     });
 }
 
-function drawGrowthFactorChart() {
-    var dailyCases = convertTotalCasesToDailyCases(confirmedCasesArr);
+
+function getOtherCountryCases(threshold, casesArr, size) {
+    var firstIndex = casesArr.findIndex(function(val) {
+        return val > threshold;
+    });
+    var relevantData = casesArr.slice(firstIndex);
+    relevantData = relevantData.slice(0, size);
+
+    return relevantData;
+}
+
+function drawGrowthFactorChart(casesData) {
+    var dailyCases = convertTotalCasesToDailyCases(casesData['countries']['local']['confirmed']);
     var growthFactorArr = []
     for (var i = 1; i < dailyCases.length; i++) {
         if (dailyCases[i - 1] == 0) {
@@ -253,7 +302,7 @@ function drawGrowthFactorChart() {
         }
     }
 
-    criticalGrowthFactorArr = Array(growthFactorArr.length).fill(1);
+    var criticalGrowthFactorArr = Array(growthFactorArr.length).fill(1);
 
     var ctx = document.getElementById('growthFactorChart');
     var myLineChart = new Chart(ctx, {
@@ -277,7 +326,7 @@ function drawGrowthFactorChart() {
                 data: criticalGrowthFactorArr
             }
             ],
-            labels: dateLabelsArr.slice(2)
+            labels: casesData['dates'].slice(2)
         },
         options: {
             responsive: true,
@@ -299,11 +348,46 @@ function drawGrowthFactorChart() {
             }
         }
     });
+
+    var periodForMeanGrowthFactor = 7;
+    var periodDailyCases = dailyCases.slice(-periodForMeanGrowthFactor);
+
+    var weekStart = periodDailyCases[0];
+    var weekEnd = periodDailyCases[periodDailyCases.length - 1];
+    var weekLength = periodDailyCases.length;
+
+    if (weekStart == 0) {
+        for (var i = 0; i < periodDailyCases.length - 1; i++)
+        if (periodDailyCases[i] != 0) {
+            weekStart = periodDailyCases[i];
+            weekLength -= i;
+            break;
+        }
+    }
+
+    var meanGrowthFactor;
+    if (weekEnd == 0) {
+        meanGrowthFactor = 0;
+    } else {
+        meanGrowthFactor = Math.pow(weekEnd / weekStart, 1 / (weekLength - 1));
+    }
+
+    var div = document.getElementById('meanGrowthFactor');
+    div.innerHTML = meanGrowthFactor.toFixed(1);
+
+    if (meanGrowthFactor <= 1) {
+        div.classList.add('colorGreen');
+    } else {
+        div.classList.add('colorRed');
+    }
+
+    div = document.getElementById('meanGrowthFactorTitle');
+    div.innerHTML = 'متوسط عامل النمو (في الأسبوع الأخير)';
 }
 
-function displayDoublesIn() {
+function displayDoublesIn(casesData) {
     var numCasesToConsider = 7;
-    var recentConfirmedCases = confirmedCasesArr.slice(-numCasesToConsider);
+    var recentConfirmedCases = casesData['countries']['local']['confirmed'].slice(-numCasesToConsider);
     var size = recentConfirmedCases.length;
     var first = recentConfirmedCases[0];
     var last = recentConfirmedCases[recentConfirmedCases.length - 1];
@@ -314,8 +398,22 @@ function displayDoublesIn() {
     var div = document.getElementById('daysToDouble');
     div.innerHTML = daysToDouble.toFixed(1);
 
+    div = document.getElementById('currentCases');
+    div.innerHTML = last;
+
+    div = document.getElementById('nextWeekCases');
+    div.innerHTML = (last * Math.pow(meanMultiplier, 7)).toFixed(0);
+
+
     div = document.getElementById('daysToDoubleTitle');
     div.innerHTML = 'أيام حتى مضاعفة عدد الحالات'
+
+    div = document.getElementById('currentCasesTitle');
+    div.innerHTML = 'عدد الحالات الحالي';
+
+    div = document.getElementById('nextWeekTitle');
+    div.innerHTML = 'عدد الحالات المتوقع بعد أسبوع';
+
 }
 
 function convertTotalCasesToDailyCases(totalCasesArr) {
