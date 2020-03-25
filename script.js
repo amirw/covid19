@@ -30,11 +30,13 @@ function analyzeData(csvData) {
                       'dates': [],
                       'countries':
                         {
-                            'local': {'confirmed': [], 'deaths': []},
-                            'Italy': {'confirmed': [], 'deaths': []},
-                            'Spain': {'confirmed': [], 'deaths': []},
-                            'Germany': {'confirmed': [], 'deaths': []},
-                            'Korea, South': {'confirmed': [], 'deaths': []}
+                            'local':        {'arabic_name': 'البلاد',           'confirmed': [], 'deaths': [], 'population': 8618562 , 'beds_per_thousand': 3.02},
+                            'Italy':        {'arabic_name': 'إيطاليا',         'confirmed': [], 'deaths': [], 'population': 60485231, 'beds_per_thousand': 3.18},
+                            'Spain':        {'arabic_name': 'إسبانيا',         'confirmed': [], 'deaths': [], 'population': 46749991, 'beds_per_thousand': 2.97},
+                            'Germany':      {'arabic_name': 'ألمانيا',         'confirmed': [], 'deaths': [], 'population': 83712702, 'beds_per_thousand': 8},
+                            'Korea, South': {'arabic_name': 'كوريا الجنوبية', 'confirmed': [], 'deaths': [], 'population': 51257511, 'beds_per_thousand': 12.27},
+                            'Turkey':       {'arabic_name': 'تركيا',            'confirmed': [], 'deaths': [], 'population': 84093774, 'beds_per_thousand': 2.81},
+                            'Japan':        {'arabic_name': 'اليابان',          'confirmed': [], 'deaths': [], 'population': 26578042, 'beds_per_thousand': 13.05},
                         }
                     };
 
@@ -45,7 +47,7 @@ function analyzeData(csvData) {
     drawDailyCasesChart(casesData);
     drawGrowthFactorChart(casesData);
 
-    drawVsWorldChart(casesData);
+    drawVsWorldCharts(casesData);
 
     displayDoublesIn(casesData);
 }
@@ -191,104 +193,148 @@ function drawDailyCasesChart(casesData) {
     });
 }
 
-function drawVsWorldChart(casesData) {
-    var threshold = 100; //number of patients to start from
+function drawVsWorldCharts(casesData) {
+    drawVsWorldTotalCasesChart(casesData);
+    drawVsWorldNormalizedByPopulationChart(casesData);
+    drawVsWorldNormalizedByBedsChart(casesData);
+}
 
-    var localFirstIndex = casesData['countries']['local']['confirmed'].findIndex(function(val) {
-        return val >= threshold;
+function drawVsWorldTotalCasesChart(casesData) {
+    threshold = 100;
+    var xlabel = ' أيام مرت منذ كانت هناك ' + threshold + ' حالة';
+    var title = 'عدد الحالات الكلي';
+    var elementId = 'vsWorldCasesChart';
+
+    var normalize_func= (function(countryData) {
+        return Array.from(countryData['confirmed']);
     });
-    var localData = casesData['countries']['local']['confirmed'].slice(localFirstIndex);
-    var series_size = localData.length;
 
-    countriesData = {};
+    drawVsWorldChart(elementId, casesData, normalize_func, threshold, xlabel, title);
+}
+
+function drawVsWorldNormalizedByPopulationChart(casesData) {
+    threshold = 10;
+    var xlabel = ' أيام مرت منذ كانت هناك ' + threshold + ' حالات لكل مليون مواطن ';
+    var title = 'عدد الحالات لكل مليون مواطن';
+    var elementId = 'vsWorldPopulationChart';
+
+    var normalize_func= (function(countryData) {
+        var million = 1000000;
+        return countryData['confirmed'].map(x => x * million / countryData['population']);
+    });
+
+    drawVsWorldChart(elementId, casesData, normalize_func, threshold, xlabel, title);
+}
+
+function drawVsWorldNormalizedByBedsChart(casesData) {
+    threshold = 0.01;
+    var xlabel = ' أيام مرت منذ كانت هناك ' + threshold + ' حالة لكل سرير ';
+    var title = 'عدد الحالات لكل سرير';
+    var elementId = 'vsWorldBedsChart';
+
+    var normalize_func= (function(countryData) {
+        var totalBeds = countryData['beds_per_thousand'] * countryData['population'] / 1000;
+        return countryData['confirmed'].map(x => x / totalBeds);
+    });
+
+    drawVsWorldChart(elementId, casesData, normalize_func, threshold, xlabel, title);
+}
+
+function drawVsWorldChart(elementId, casesData, normalize_func, threshold, xlabel, title) {
+
+    var getCountryData = (function(threshold, casesArr) {
+        var firstIndex = casesArr.findIndex(function(val) {
+            return val > threshold;
+        });
+        var relevantData = casesArr.slice(firstIndex);
+        
+        return relevantData;
+    });
+
+    var series_size = 0;
+    var countriesData = {};
     for (country in casesData['countries']) {
-        if (country != 'local') {
-            countriesData[country] = getOtherCountryCases(threshold, casesData['countries'][country]['confirmed'], series_size);
+        normalizedData = normalize_func(casesData['countries'][country]);
+        countriesData[country] = getCountryData(threshold, normalizedData);
+        if (countriesData[country].length > series_size) {
+            series_size = countriesData[country].length;
         }
     }
 
-    var daysSince = [...Array(series_size).keys()]
+    var daysSince = [...Array(series_size).keys()];
 
-    var ctx = document.getElementById('vsWorldChart');
+    var ctx = document.getElementById(elementId);
+
+    var datasets = Object.keys(countriesData).map(k => {
+        var item = {
+        'label': casesData['countries'][k]['arabic_name'],
+        'fill': false,
+        'borderColor': countryNameToColor(k),
+        'lineTension': 0.1,
+        'borderWidth': (k == 'local' ? 6 : 2),
+        'data': countriesData[k]
+        };
+
+        return item;
+    });
+
     var myLineChart = new Chart(ctx, {
         type: 'line',
         data: {
-            datasets: [
-            {
-                'label': 'البلاد',
-                'fill': false,
-                'borderColor': 'rgb(0, 0, 0)',
-                'lineTension': 0.1,
-                'borderWidth': 6,
-                data: localData
-            },
-            {
-                'label': 'إيطاليا',
-                'fill': false,
-                'borderColor':'rgb(72, 237, 10)',
-                'lineTension': 0.1,
-                data: countriesData['Italy']
-            },
-            {
-                'label': 'إسبانيا',
-                'fill': false,
-                'borderColor':'rgb(187, 17, 0)',
-                'lineTension': 0.1,
-                data: countriesData['Spain']
-            },
-            {
-                'label': 'ألمانيا',
-                'fill': false,
-                'borderColor':'rgb(235, 153, 48)',
-                'lineTension': 0.1,
-                data: countriesData['Germany']
-            },
-            {
-                'label': 'كوريا الجنوبية',
-                'fill': false,
-                'borderColor':'rgb(40, 156, 235)',
-                'lineTension': 0.1,
-                data: countriesData['Korea, South']
-            },
-            ],
+            datasets: datasets,
             labels: daysSince
         },
         options: {
             responsive: true,
             title: {
-                text: 'مقارنة مع بلاد أخرى',
-                display: false,
+                text: title,
+                display: true,
                 fontSize: 20,
             },
             scales: {
                 xAxes: [{
                     scaleLabel: {
                         display: true,
-                        labelString: ' أيام مرت منذ كانت هناك ' + threshold + ' حالة',
+                        labelString: xlabel,
                         fontSize: 20
                     },
                 }],
-                yAxes: [{
-                    scaleLabel: {
-                        display: true,
-                        labelString: 'عدد الحالات الكلي',
-                        fontSize: 20
+            },
+            plugins: {
+                zoom: {
+                    pan: {
+                        enabled: true,
+                        mode: 'xy'
                     },
-                }]
+    
+                    zoom: {
+                        enabled: true,
+                        mode: 'xy',
+                    }
+                }
             }
         }
     });
+    
 }
 
+function countryNameToColor(str) {
+    var hardcoded = {
+        'local': 'rgb(0, 0, 0)',
+        'Italy': 'rgb(235, 117, 101)',
+        'Spain': 'rgb(235, 13, 15)',
+        'Germany': 'rgb(111, 112, 235)',
+        'Korea, South': 'rgb(54, 139, 235)',
+        'Turkey': 'rgb(95, 235, 91)',
+        'Japan': 'rgb(235, 114, 182)'
+    };
 
-function getOtherCountryCases(threshold, casesArr, size) {
-    var firstIndex = casesArr.findIndex(function(val) {
-        return val > threshold;
-    });
-    var relevantData = casesArr.slice(firstIndex);
-    relevantData = relevantData.slice(0, size);
-
-    return relevantData;
+    if (str in hardcoded) {
+        return hardcoded[str];
+    }
+    
+    var colorHash = new ColorHash({lightness: 0.5});
+    return colorHash.hex(str);
 }
 
 function drawGrowthFactorChart(casesData) {

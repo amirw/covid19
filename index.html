@@ -6,8 +6,11 @@
     <meta content="utf-8" http-equiv="encoding">
     <title> COVID-19 </title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js" integrity="sha256-R4pqcOYV8lt7snxMQO/HSbVCFRPMdrhAFMH+vr9giYI=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/hammerjs@2.0.8/hammer.min.js" integrity="sha256-eVNjHw5UeU0jUqPPpZHAkU1z4U+QFBBY488WvueTm88=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom@0.7.5/chartjs-plugin-zoom.min.js" integrity="sha256-KLpPTiChnsiDPdNKaRZvEeOpCNjUCJ61fRBe7zX2SZU=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.1.0/papaparse.min.js" integrity="sha256-Fh801SO9gqegfUdkDxyzXzIUPWzO/Vatqj8uN+5xcL4=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js" integrity="sha256-4iQZ6BVL4qNKlQ27TExEhBN1HFPvAvAMbFavKKosSWQ=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/color-hash/1.0.3/color-hash.min.js" integrity="sha256-K3tl2r299ANvrKjE9qgzyf7yE5+0TLsZHctyuHuyFMk=" crossorigin="anonymous"></script>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.css" integrity="sha256-aa0xaJgmK/X74WM224KMQeNQC2xYKwlAt08oZqjeF0E=" crossorigin="anonymous" />
 
@@ -17,12 +20,12 @@
 <body>
     <div class="wrapper">
 
-        <div class="current_cases_wrapper component_wrapper">
+        <div id="current_cases_wrapper" class="component_wrapper">
             <div class="sectionTitle">عدد الحالات الحالي</div>
             <div id="currentCases" class="bigNumber colorRed"></div>
         </div>
 
-        <div class="days_to_double_wrapper component_wrapper">
+        <div id="days_to_double_wrapper" class="component_wrapper">
             <div class="tooltip_wrapper">
                 <div class="sectionTitle">أيام حتى مضاعفة عدد الحالات</div>
                 <span class="tooltiptext"> عدد الإصابات يتضاعف كل هذا القدر من الأيام</span>
@@ -30,28 +33,36 @@
             <div id="daysToDouble" class="bigNumber colorRed"></div>
         </div>
 
-        <div class="next_week_wrapper component_wrapper">
+        <div id="next_week_wrapper" class="component_wrapper">
             <div class="sectionTitle">عدد الحالات المتوقع بعد أسبوع</div>
             <div id="nextWeekCases" class="bigNumber colorRed"></div>
         </div>
 
 
-        <div class="total_cases_chart_wrapper component_wrapper">
+        <div id="total_cases_chart_wrapper" class="component_wrapper">
             <div class="sectionTitle">مجمل الحالات في البلاد</div>
             <canvas id="totalCasesChart"></canvas>
         </div>
 
-        <div class="daily_cases_chart_wrapper component_wrapper">
+        <div id="daily_cases_chart_wrapper" class="component_wrapper">
             <div class="sectionTitle">حالات جديدة في البلاد</div>
             <canvas id="dailyCasesChart"></canvas>
         </div>
 
-        <div class="vs_world_wrapper component_wrapper">
-            <div class="sectionTitle">مقارنة مع بلاد أخرى</div>
-            <canvas id="vsWorldChart"></canvas>
+        <div id="vs_world_wrapper">
+            <div id="vs_world_title" class="sectionTitle">مقارنة مع بلاد أخرى</div>
+            <div id="vs_world_cases_wrapper" class="component_wrapper">
+                <canvas id="vsWorldCasesChart"></canvas>
+            </div>
+            <div id="vs_world_population_wrapper" class="component_wrapper">
+                <canvas id="vsWorldPopulationChart"></canvas>
+            </div>
+            <div id="vs_world_beds_wrapper" class="component_wrapper">
+                <canvas id="vsWorldBedsChart"></canvas>
+            </div>
         </div>
 
-        <div class="growth_factor_chart_wrapper component_wrapper">
+        <div id="growth_factor_chart_wrapper" class="component_wrapper">
             <div class="tooltip_wrapper">
                 <div class="sectionTitle">عامل النمو</div>
                 <span class="tooltiptext"> هذا الرقم يعبر عن سرعة انتشار الوباء. الوباء في تسارع طالما هذا الرقم أكبر من ١ </span>
@@ -60,7 +71,7 @@
             <canvas id="growthFactorChart"></canvas>
         </div>
 
-        <div class="mean_growth_factor_wrapper component_wrapper">
+        <div id="mean_growth_factor_wrapper" class="component_wrapper">
             <div class="tooltip_wrapper">
                 <div class="sectionTitle">متوسط عامل النمو (في الأسبوع الأخير) </div>
                 <span class="tooltiptext"> هذا الرقم يعبر عن سرعة انتشار الوباء. الوباء في تسارع طالما هذا الرقم أكبر من ١ </span>
@@ -77,6 +88,19 @@
         <p class="rtl">
             <a href="https://github.com/CSSEGISandData/COVID-19/tree/master/csse_covid_19_data">المعطيات الخام</a>
             من مركز CSSE في جامعة جون هوبكنز
+        </p>
+        <p class="rtl">
+            المعطيات حول التعداد السكاني من موقع
+            <a href="https://www.worldometers.info/world-population/"> Worldometer </a>
+        </p>
+        <p class="rtl">
+            معطيات عدد الأسرّة في المستشفيات من موقع
+            <a href="https://en.wikipedia.org/wiki/List_of_countries_by_hospital_beds"> Wikipedia </a>
+            . المعطيات حول عدد الأسرة هي عن عام ٢٠١٧م
+        </p>
+        <p class="rtl">
+            بعض الأرقام والرسوم البيانية هي تحليل للبيانات الخام وقد تكون غير دقيقة أو خاطئة تماما.
+            إذا كنت بحاجة إلى تحليلات دقيقة وذات قيمة يمكنك البحث عند الخبراء وأهل الاختصاص.
         </p>
     </footer>
 
