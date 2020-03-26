@@ -51,6 +51,25 @@ body {
         grid-template-columns: repeat(4, 1fr);
     }
 
+    #current_cases_wrapper {
+        grid-column: 4;
+        grid-row: 1;
+    }
+
+    #days_to_double_wrapper {
+        grid-column: 3;
+        grid-row: 1;
+    }
+
+    #next_week_wrapper {
+        grid-column: 2;
+        grid-row: 1;
+    }
+
+    #mean_growth_factor_wrapper {
+        grid-column: 1;
+        grid-row: 1;
+    }
 }
 
 @media (min-width: 1400px) {
@@ -58,8 +77,39 @@ body {
         grid-template-columns: repeat(3, 1fr);
     }
 
+    #total_cases_chart_wrapper {
+        grid-column: 3;
+        grid-row: 1;
+    }
+
+    #daily_cases_chart_wrapper {
+        grid-column: 2;
+        grid-row: 1;
+    }
+
+    #growth_factor_chart_wrapper {
+        grid-column: 1;
+        grid-row: 1;
+    }
+
+
     #vs_world_wrapper {
         grid-template-columns: repeat(3, 1fr);
+    }
+
+    #vs_world_cases_wrapper {
+        grid-column: 3;
+        grid-row: 2;
+    }
+
+    #vs_world_population_wrapper {
+        grid-column: 2;
+        grid-row: 2;
+    }
+
+    #vs_world_beds_wrapper {
+        grid-column: 1;
+        grid-row: 2;
     }
 }
 
