@@ -18,67 +18,93 @@
 </head>
 
 <body>
-    <div class="wrapper">
+    <div id="wrapper">
 
-        <div id="current_cases_wrapper" class="component_wrapper">
-            <div class="sectionTitle">عدد الحالات الحالي</div>
-            <div id="currentCases" class="bigNumber colorRed"></div>
-        </div>
+        <div id="numbers_wrapper">
 
-        <div id="days_to_double_wrapper" class="component_wrapper">
-            <div class="tooltip_wrapper">
-                <div class="sectionTitle">أيام حتى مضاعفة عدد الحالات</div>
-                <span class="tooltiptext"> عدد الإصابات يتضاعف كل هذا القدر من الأيام</span>
+            <div id="mean_growth_factor_wrapper" class="component_wrapper">
+                <div class="tooltip_wrapper">
+                    <div class="sectionTitle">متوسط عامل النمو (في الأسبوع الأخير) </div>
+                    <span class="tooltiptext"> هذا الرقم يعبر عن سرعة انتشار الوباء. الوباء في تسارع طالما هذا الرقم أكبر من ١ </span>
+                </div>
+                <div id="meanGrowthFactor" class="bigNumber"></div>
             </div>
-            <div id="daysToDouble" class="bigNumber colorRed"></div>
+
+            <div id="next_week_wrapper" class="component_wrapper">
+                <div class="sectionTitle">عدد الحالات المتوقع بعد أسبوع</div>
+                <div id="nextWeekCases" class="bigNumber colorRed"></div>
+            </div>
+
+            <div id="days_to_double_wrapper" class="component_wrapper">
+                <div class="tooltip_wrapper">
+                    <div class="sectionTitle">أيام حتى مضاعفة عدد الحالات</div>
+                    <span class="tooltiptext"> عدد الإصابات يتضاعف كل هذا القدر من الأيام</span>
+                </div>
+                <div id="daysToDouble" class="bigNumber colorRed"></div>
+            </div>
+
+            <div id="current_cases_wrapper" class="component_wrapper">
+                <div class="sectionTitle">عدد الحالات الحالي</div>
+                <div id="currentCases" class="bigNumber colorRed"></div>
+            </div>
+
         </div>
 
-        <div id="next_week_wrapper" class="component_wrapper">
-            <div class="sectionTitle">عدد الحالات المتوقع بعد أسبوع</div>
-            <div id="nextWeekCases" class="bigNumber colorRed"></div>
+
+        <div id="cases_wrapper">
+
+            <div id="total_cases_chart_wrapper" class="component_wrapper">
+                <div class="sectionTitle">مجمل الحالات في البلاد</div>
+                <div id="totalCasesChartContainer" class="chart-container">
+                    <canvas id="totalCasesChart"></canvas>
+                </div>
+            </div>
+
+            <div id="daily_cases_chart_wrapper" class="component_wrapper">
+                <div class="sectionTitle">حالات جديدة في البلاد</div>
+                <div id="dailyCasesChartContainer" class="chart-container">
+                    <canvas id="dailyCasesChart"></canvas>
+                </div>
+            </div>
+
+            <div id="growth_factor_chart_wrapper" class="component_wrapper">
+                <div class="tooltip_wrapper">
+                    <div class="sectionTitle">عامل النمو</div>
+                    <span class="tooltiptext"> هذا الرقم يعبر عن سرعة انتشار الوباء. الوباء في تسارع طالما هذا الرقم أكبر من ١ </span>
+                </div>
+
+                <div id="growthFactorChartContrainer" class="chart-container">
+                    <canvas id="growthFactorChart"></canvas>
+                </div>
+            </div>
+
         </div>
 
-
-        <div id="total_cases_chart_wrapper" class="component_wrapper">
-            <div class="sectionTitle">مجمل الحالات في البلاد</div>
-            <canvas id="totalCasesChart"></canvas>
-        </div>
-
-        <div id="daily_cases_chart_wrapper" class="component_wrapper">
-            <div class="sectionTitle">حالات جديدة في البلاد</div>
-            <canvas id="dailyCasesChart"></canvas>
-        </div>
 
         <div id="vs_world_wrapper">
+
             <div id="vs_world_title" class="sectionTitle">مقارنة مع بلاد أخرى</div>
-            <div id="vs_world_cases_wrapper" class="component_wrapper">
-                <canvas id="vsWorldCasesChart"></canvas>
-            </div>
-            <div id="vs_world_population_wrapper" class="component_wrapper">
-                <canvas id="vsWorldPopulationChart"></canvas>
-            </div>
+
             <div id="vs_world_beds_wrapper" class="component_wrapper">
-                <canvas id="vsWorldBedsChart"></canvas>
-            </div>
-        </div>
-
-        <div id="growth_factor_chart_wrapper" class="component_wrapper">
-            <div class="tooltip_wrapper">
-                <div class="sectionTitle">عامل النمو</div>
-                <span class="tooltiptext"> هذا الرقم يعبر عن سرعة انتشار الوباء. الوباء في تسارع طالما هذا الرقم أكبر من ١ </span>
+                <div id="vsWorldBedsChartContainer" class="chart-container">
+                    <canvas id="vsWorldBedsChart"></canvas>
+                </div>
             </div>
 
-            <canvas id="growthFactorChart"></canvas>
+            <div id="vs_world_population_wrapper" class="component_wrapper">
+                <div id="vsWorldPopulationChartContainer" class="chart-container">
+                    <canvas id="vsWorldPopulationChart"></canvas>
+                </div>
+            </div>
+
+            <div id="vs_world_cases_wrapper" class="component_wrapper">
+                <div id="vsWorldCasesChartContainer" class="chart-container">
+                    <canvas id="vsWorldCasesChart"></canvas>
+                </div>
+            </div>
+
         </div>
 
-        <div id="mean_growth_factor_wrapper" class="component_wrapper">
-            <div class="tooltip_wrapper">
-                <div class="sectionTitle">متوسط عامل النمو (في الأسبوع الأخير) </div>
-                <span class="tooltiptext"> هذا الرقم يعبر عن سرعة انتشار الوباء. الوباء في تسارع طالما هذا الرقم أكبر من ١ </span>
-            </div>
-            <div id="meanGrowthFactor" class="bigNumber"></div>
-        </div>
-        
 
     </div>
     <script src="script.js"> </script>

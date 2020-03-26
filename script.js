@@ -25,7 +25,7 @@ function analyzeData(csvData) {
     if ((csvData['confirmed'] == null) || (csvData['deaths'] == null)) {
         return;
     }
-    
+
     var casesData = {
                       'dates': [],
                       'countries':
@@ -42,7 +42,6 @@ function analyzeData(csvData) {
 
     extractCasesData(csvData, casesData);
 
-    
     drawTotalCasesChart(casesData);
     drawDailyCasesChart(casesData);
     drawGrowthFactorChart(casesData);
@@ -53,7 +52,7 @@ function analyzeData(csvData) {
 }
 
 function extractCasesData(csvData, casesData) {
-    
+
     var extractDates = true;
     var caseTypes = ['confirmed', 'deaths'];
 
@@ -79,7 +78,7 @@ function extractCasesData(csvData, casesData) {
             extractDates = false;
         }
     }
-} 
+}
 
 function isRelevantDataKey(key) {
     var startDate = moment('2/20/20', 'M/D/YY', true);
@@ -114,6 +113,7 @@ function drawTotalCasesChart(casesData) {
         },
         options: {
             responsive: true,
+
             title: {
                 text: 'مجمل الحالات في البلاد',
                 display: false,
@@ -171,6 +171,7 @@ function drawDailyCasesChart(casesData) {
         },
         options: {
             responsive: true,
+
             title: {
                 text: 'حالات جديدة في البلاد',
                 display: false,
@@ -286,6 +287,7 @@ function drawVsWorldChart(elementId, casesData, normalize_func, threshold, xlabe
         },
         options: {
             responsive: true,
+
             title: {
                 text: title,
                 display: true,
@@ -376,6 +378,7 @@ function drawGrowthFactorChart(casesData) {
         },
         options: {
             responsive: true,
+
             title: {
                 text: 'عامل النمو',
                 display: false,
