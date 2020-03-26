@@ -305,19 +305,18 @@ function drawVsWorldChart(elementId, casesData, normalize_func, threshold, xlabe
             plugins: {
                 zoom: {
                     pan: {
-                        enabled: true,
+                        enabled: false,
                         mode: 'xy'
                     },
-    
+
                     zoom: {
-                        enabled: true,
+                        enabled: false,
                         mode: 'xy',
                     }
                 }
             }
         }
     });
-    
 }
 
 function countryNameToColor(str) {
