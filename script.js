@@ -38,6 +38,7 @@ function analyzeData(csvData) {
                             'Turkey':       {'arabic_name': 'تركيا',            'confirmed': [], 'deaths': [], 'population': 84093774, 'beds_per_thousand': 2.81},
                             'Japan':        {'arabic_name': 'اليابان',          'confirmed': [], 'deaths': [], 'population': 26578042, 'beds_per_thousand': 13.05},
                             'China':        {'arabic_name': 'الصين',               'confirmed': [], 'deaths': [], 'population': 1437858810, 'beds_per_thousand': 4.34},
+                            'US':           {'arabic_name': 'الولايات المتحدة',               'confirmed': [], 'deaths': [], 'population': 330488824, 'beds_per_thousand': 2.77},
                         }
                     };
 
@@ -285,7 +286,8 @@ function drawVsWorldChart(elementId, casesData, normalize_func, threshold, xlabe
         'borderColor': countryNameToColor(k),
         'lineTension': 0.1,
         'borderWidth': (k == 'local' ? 6 : 2),
-        'data': countriesData[k]
+        'data': countriesData[k],
+        'hidden': !isShowCountryOnLoad(k),
         };
 
         return item;
@@ -340,7 +342,8 @@ function countryNameToColor(str) {
         'Korea, South': 'rgb(54, 139, 235)',
         'Turkey': 'rgb(95, 235, 91)',
         'Japan': 'rgb(235, 114, 182)',
-        'China': 'rgb(235, 11, 148)'
+        'China': 'rgb(235, 11, 148)',
+        'US': 'rgb(20, 235, 218)',
     };
 
     if (str in hardcoded) {
@@ -349,6 +352,11 @@ function countryNameToColor(str) {
     
     var colorHash = new ColorHash({lightness: 0.5});
     return colorHash.hex(str);
+}
+
+function isShowCountryOnLoad(countryName) {
+    var show = ['local', 'Italy', 'Spain'];
+    return show.includes(countryName);
 }
 
 function drawGrowthFactorChart(casesData) {
