@@ -37,6 +37,7 @@ function analyzeData(csvData) {
                             'Korea, South': {'arabic_name': 'كوريا الجنوبية', 'confirmed': [], 'deaths': [], 'population': 51257511, 'beds_per_thousand': 12.27},
                             'Turkey':       {'arabic_name': 'تركيا',            'confirmed': [], 'deaths': [], 'population': 84093774, 'beds_per_thousand': 2.81},
                             'Japan':        {'arabic_name': 'اليابان',          'confirmed': [], 'deaths': [], 'population': 26578042, 'beds_per_thousand': 13.05},
+                            'China':        {'arabic_name': 'الصين',               'confirmed': [], 'deaths': [], 'population': 1437858810, 'beds_per_thousand': 4.34},
                         }
                     };
 
@@ -64,11 +65,10 @@ function extractCasesData(csvData, casesData) {
                 var countryCompare = (country == 'local') ? 'Israel' : country;
                 return ('Country/Region' in rowData) && (rowData['Country/Region'] == countryCompare);
             });
-            myData = myData[0];
 
-            for (var key in myData) {
+            for (var key in myData[0]) {
                 if (isRelevantDataKey(key)) {
-                    casesData['countries'][country][caseType].push(parseInt(myData[key]));
+                    casesData['countries'][country][caseType].push(parseInt(myData[0][key]));
                     if (extractDates) {
                         casesData['dates'].push(key);
                     }
@@ -76,6 +76,18 @@ function extractCasesData(csvData, casesData) {
             }
 
             extractDates = false;
+
+            /* handle multi state countries */
+            for (var i = 1; i < myData.length; i++) {
+                var itemIdx = 0;
+                for (var key in myData[i]) {
+                    if (isRelevantDataKey(key)) {
+                        casesData['countries'][country][caseType][itemIdx] += parseInt(myData[i][key]);
+                        itemIdx += 1;
+                    }
+                }
+            }
+
         }
     }
 }
@@ -327,7 +339,8 @@ function countryNameToColor(str) {
         'Germany': 'rgb(111, 112, 235)',
         'Korea, South': 'rgb(54, 139, 235)',
         'Turkey': 'rgb(95, 235, 91)',
-        'Japan': 'rgb(235, 114, 182)'
+        'Japan': 'rgb(235, 114, 182)',
+        'China': 'rgb(235, 11, 148)'
     };
 
     if (str in hardcoded) {
