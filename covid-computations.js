@@ -257,3 +257,11 @@ function computeWorldData(casesData, normalize_func, threshold) {
     return {'countriesData': countriesData,
             'daysSince': daysSince};
 }
+
+function computeDeathRatio(casesData, country, daysBack) {
+    var cases = casesData['countries'][country];
+    var deaths = cases['deaths'][cases['deaths'].length - 1];
+    var confirmed = cases['confirmed'][cases['confirmed'].length - 1 - daysBack];
+    var ratio =  deaths / confirmed;
+    return ratio;
+}

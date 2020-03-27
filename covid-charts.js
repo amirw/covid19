@@ -9,7 +9,7 @@ function presentCovidCharts(casesData) {
 
     drawVsWorldCharts(casesData);
 
-    displayDoublesIn(casesData);
+    displayNumbers(casesData);
 }
 
 function drawTotalCasesChart(casesData) {
@@ -317,7 +317,7 @@ function drawGrowthFactorChart(casesData) {
     }
 }
 
-function displayDoublesIn(casesData) {
+function displayNumbers(casesData) {
     var numCasesToConsider = 7;
 
     // regular cases
@@ -345,4 +345,10 @@ function displayDoublesIn(casesData) {
 
     div = document.getElementById('nextWeekDeaths');
     div.innerHTML = deathsGrowthData['nextPeriodCases'].toFixed(0);
+
+    var daysBackForDeathRatio = 7;
+    var death_ratio = computeDeathRatio(casesData, 'local', daysBackForDeathRatio);
+    
+    div = document.getElementById('deathPercentage');
+    div.innerHTML = (death_ratio * 100).toFixed(0) + '%';
 }
