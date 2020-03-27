@@ -273,6 +273,7 @@ function drawGrowthFactorChart(casesData) {
                 'fill': false,
                 'borderColor': 'rgb(0, 150, 255)',
                 'lineTension': 0.1,
+                hidden: true,
                 data: growthData['growthFactorData']
             },
             {
