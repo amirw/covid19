@@ -88,3 +88,9 @@ footer {
     text-align: center;
     padding: 4rem;
 }
+
+canvas{
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+}

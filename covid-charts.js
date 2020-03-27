@@ -208,19 +208,6 @@ function drawVsWorldChart(elementId, casesData, worldData, xlabel, title) {
                     },
                 }],
             },
-            plugins: {
-                zoom: {
-                    pan: {
-                        enabled: false,
-                        mode: 'xy'
-                    },
-
-                    zoom: {
-                        enabled: false,
-                        mode: 'xy',
-                    }
-                }
-            }
         }
     });
 }
