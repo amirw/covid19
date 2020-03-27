@@ -31,6 +31,11 @@ body {
     height: 100%;
 }
 
+.big_text {
+    font-size: calc(1rem + 2vw);
+    height: 100%;
+}
+
 .color_red {
     color: red;
 }
@@ -41,6 +46,10 @@ body {
 
 .color_blue {
     color: blue;
+}
+
+.color_orange {
+    color: orange;
 }
 
 .tooltip_wrapper {
@@ -71,7 +80,7 @@ body {
     visibility: visible;
 }
 
-p.rtl {
+.rtl {
     direction: rtl;
 }
 

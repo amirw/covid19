@@ -1,0 +1,104 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+    <meta content="utf-8" http-equiv="encoding">
+
+    <title> COVID-19 </title>
+    <link rel="shortcut icon" href="favicon.png" />
+    <link rel="apple-touch-icon" href="favicon.png" />
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.1.0/papaparse.min.js" integrity="sha256-Fh801SO9gqegfUdkDxyzXzIUPWzO/Vatqj8uN+5xcL4=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js" integrity="sha256-4iQZ6BVL4qNKlQ27TExEhBN1HFPvAvAMbFavKKosSWQ=" crossorigin="anonymous"></script>
+
+    <script src="covid-computations.js"></script>
+    <script src="covid-simple.js"></script>
+
+    <link rel="stylesheet" href="style.css?v=0.1" />
+    <link rel="stylesheet" href="style-simple.css?v=0.1" />
+</head>
+
+<body>
+    <div id="wrapper">
+
+        <div id="header" class="header">
+            <p class="doaa">
+                اللهم إنا نعوذ بك من البرص والجنون والجذام وسيء الأسقام
+            </p>
+            <p class="page_title">
+                معلومات حول انتشار وباء الكورونا (كوفيد-١٩) في البلاد
+            </p>
+        </div>
+
+        <div id="status_wrapper" class="component_wrapper">
+            <div class="section_title">الوضع العام</div>
+            <div id="current_status" class="big_text rtl"></div>
+        </div>
+
+        <div id="can_go_outside_wrapper" class="component_wrapper">
+            <div class="section_title">بقدر أطلع؟</div>
+            <div id="can_go_outside" class="big_text rtl"></div>
+        </div>
+
+        <div id="vs_world_wrapper">
+            <div id="vs_world_title">
+                <div class="tooltip_wrapper">
+                    <div class="section_title">مقارنة مع بلاد أخرى</div>
+                    <span class="tooltiptext"> بالنظر إلى عدد الحالات مقابل عدد الأسرّة في المستشفيات </span>
+                </div>
+            </div>
+
+            <div id="vs_italy_wrapper" class="component_wrapper">
+                <div class="section_title">إيطاليا</div>
+                <div id="vs_italy" class="big_text"></div>
+            </div>
+
+            <div id="vs_spain_wrapper" class="component_wrapper">
+                <div class="section_title">إسبانيا</div>
+                <div id="vs_spain" class="big_text"></div>
+            </div>
+
+            <div id="vs_usa_wrapper" class="component_wrapper">
+                <div class="section_title">الولايات المتحدة</div>
+                <div id="vs_usa" class="big_text"></div>
+            </div>
+
+            <div id="vs_germany_wrapper" class="component_wrapper">
+                <div class="section_title">ألمانيا</div>
+                <div id="vs_germany" class="big_text"></div>
+            </div>
+
+        </div>
+     
+    </div>
+
+    <footer>
+        <p>خربشة: أمير وتد</p>
+        <p class="rtl">
+            <a href="https://github.com/CSSEGISandData/COVID-19/tree/master/csse_covid_19_data">المعطيات الخام</a>
+            من مركز CSSE في جامعة جون هوبكنز
+        </p>
+        <p class="rtl">
+            المعطيات حول التعداد السكاني من موقع
+            <a href="https://www.worldometers.info/world-population/"> Worldometer </a>
+        </p>
+        <p class="rtl">
+            معطيات عدد الأسرّة في المستشفيات من موقع
+            <a href="https://en.wikipedia.org/wiki/List_of_countries_by_hospital_beds"> Wikipedia </a>
+            . المعطيات حول عدد الأسرة هي عن عام ٢٠١٧م أو ٢٠١٦م
+        </p>
+        <p class="rtl">
+            بعض الأرقام والرسوم البيانية هي تحليل للبيانات الخام وقد تكون غير دقيقة أو خاطئة تماما.
+            إذا كنت بحاجة إلى تحليلات دقيقة وذات قيمة يمكنك البحث عند الخبراء وأهل الاختصاص.
+        </p>
+        <img src="https://hitcounter.pythonanywhere.com/count/tag.svg?url=https%3A%2F%2Famirw.github.io%2Fcovid19%2Fsimple.html" alt="Hits">
+        <p class="rtl">
+            إلى الموقع
+            <a href="index.html">المفصل</a>
+        </p>
+    </footer>
+
+</body>
+
+</html>
