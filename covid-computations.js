@@ -146,13 +146,17 @@ function computeGrowthData(casesData, country, casesType, periodToAverage) {
         }
     }
 
-    var relevantGrowthFactors = growthFactorArr.slice(-periodToAverage);
+    var meanGrowthFactorArr = [];
 
-    relevantGrowthFactors = relevantGrowthFactors.filter(function(val) {
-        return (val != 0) && (val != Infinity);
-    });
-    var meanGrowthFactor = geometricMean(relevantGrowthFactors);
+    for (var i = 0; i < growthFactorArr.length - periodToAverage + 1; i++) {
+        var relevantGrowthFactors = growthFactorArr.slice(i, i + periodToAverage);
+        relevantGrowthFactors = relevantGrowthFactors.filter(function(val) {
+            return (val != 0) && (val != Infinity);
+        });
+        meanGrowthFactorArr.push(geometricMean(relevantGrowthFactors));
+    }
 
+    var meanGrowthFactor = meanGrowthFactorArr[meanGrowthFactorArr.length - 1];
 
     var recentCases = casesData['countries'][country][casesType].slice(-periodToAverage);
     var firstNonZero = recentCases.findIndex(x => (x > 0));
@@ -182,6 +186,7 @@ function computeGrowthData(casesData, country, casesType, periodToAverage) {
     return {'growthFactorData': growthFactorArr,
             'growthFactorDataDates': casesData['dates'].slice(2),
             'meanGrowthFactor': meanGrowthFactor,
+            'meanGrowthFactorArr': meanGrowthFactorArr,
             'meanMultipier': meanMultiplier,
             'daysToDouble': daysToDouble,
             'nextPeriodCases': nextPeriodCases};

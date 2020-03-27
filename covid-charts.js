@@ -259,6 +259,10 @@ function drawGrowthFactorChart(casesData) {
 
     var criticalGrowthFactorArr = Array(growthData['growthFactorDataDates'].length).fill(1);
 
+    var meanGrowthFactorArr = Array(growthData['growthFactorDataDates'].length - growthData['meanGrowthFactorArr'].length).fill(0);
+    meanGrowthFactorArr = meanGrowthFactorArr.concat(growthData['meanGrowthFactorArr']);
+
+
     var ctx = document.getElementById('growthFactorChart');
     var myLineChart = new Chart(ctx, {
         type: 'line',
@@ -270,6 +274,13 @@ function drawGrowthFactorChart(casesData) {
                 'borderColor': 'rgb(0, 150, 255)',
                 'lineTension': 0.1,
                 data: growthData['growthFactorData']
+            },
+            {
+                'label': 'عامل النمو المتوسط',
+                'fill': false,
+                'borderColor': 'rgb(255, 205, 0)',
+                'lineTension': 0.1,
+                data: meanGrowthFactorArr
             },
             {
                 'label': 'عامل النمو الحرج',
