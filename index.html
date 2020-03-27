@@ -24,24 +24,33 @@
 <body>
     <div id="wrapper">
 
-        <div id="numbers_wrapper">
+        <div id="header">
+            <p id="doaa">
+                اللهم إنا نعوذ بك من البرص والجنون والجذام وسيء الأسقام
+            </p>
+            <p id="pageTitle">
+                معلومات حول انتشار وباء الكورونا (كوفيد-١٩) في البلاد
+            </p>
+        </div>
+
+        <div id="numbers_wrapper_cases">
 
             <div id="current_cases_wrapper" class="component_wrapper">
-                <div class="sectionTitle">عدد الحالات الحالي</div>
-                <div id="currentCases" class="bigNumber colorRed"></div>
+                <div class="sectionTitle">عدد الحالات المجمل</div>
+                <div id="currentCases" class="bigNumber colorBlue"></div>
             </div>
 
-            <div id="days_to_double_wrapper" class="component_wrapper">
+            <div id="days_to_double_cases_wrapper" class="component_wrapper">
                 <div class="tooltip_wrapper">
-                    <div class="sectionTitle">أيام حتى مضاعفة عدد الحالات</div>
+                    <div class="sectionTitle">أيام حتى مضاعفة عدد الحالات المجمل</div>
                     <span class="tooltiptext"> عدد الإصابات يتضاعف كل هذا القدر من الأيام</span>
                 </div>
-                <div id="daysToDouble" class="bigNumber colorRed"></div>
+                <div id="daysToDoubleCases" class="bigNumber colorBlue"></div>
             </div>
 
-            <div id="next_week_wrapper" class="component_wrapper">
-                <div class="sectionTitle">عدد الحالات المتوقع بعد أسبوع</div>
-                <div id="nextWeekCases" class="bigNumber colorRed"></div>
+            <div id="next_week_cases_wrapper" class="component_wrapper">
+                <div class="sectionTitle">عدد الحالات المجمل المتوقع بعد أسبوع</div>
+                <div id="nextWeekCases" class="bigNumber colorBlue"></div>
             </div>
 
             <div id="mean_growth_factor_wrapper" class="component_wrapper">
@@ -50,6 +59,28 @@
                     <span class="tooltiptext"> هذا الرقم يعبر عن سرعة انتشار الوباء. الوباء في تسارع طالما هذا الرقم أكبر من ١ </span>
                 </div>
                 <div id="meanGrowthFactor" class="bigNumber"></div>
+            </div>
+
+        </div>
+
+        <div id="numbers_wrapper_deaths">
+
+            <div id="current_deaths_wrapper" class="component_wrapper">
+                <div class="sectionTitle">عدد الوفيات</div>
+                <div id="currentDeaths" class="bigNumber colorRed"></div>
+            </div>
+
+            <div id="days_to_double_deaths_wrapper" class="component_wrapper">
+                <div class="tooltip_wrapper">
+                    <div class="sectionTitle">أيام حتى مضاعفة عدد الوفيات</div>
+                    <span class="tooltiptext"> عدد الوفيات يتضاعف كل هذا القدر من الأيام</span>
+                </div>
+                <div id="daysToDoubleDeaths" class="bigNumber colorRed"></div>
+            </div>
+
+            <div id="next_week_deaths_wrapper" class="component_wrapper">
+                <div class="sectionTitle">عدد الوفيات المتوقع بعد أسبوع</div>
+                <div id="nextWeekDeaths" class="bigNumber colorRed"></div>
             </div>
 
         </div>
