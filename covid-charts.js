@@ -319,7 +319,7 @@ function drawGrowthFactorChart(casesData) {
     var meanGrowthFactor = growthData['meanGrowthFactor'];
 
     var div = document.getElementById('meanGrowthFactor');
-    div.innerHTML = meanGrowthFactor.toFixed(1);
+    div.innerHTML = meanGrowthFactor.toFixed(2);
 
     if (meanGrowthFactor <= 1) {
         div.classList.add('colorGreen');
