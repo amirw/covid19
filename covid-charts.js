@@ -13,7 +13,7 @@ function presentCovidCharts(casesData) {
 }
 
 function drawTotalCasesChart(casesData) {
-    var ctx = document.getElementById('totalCasesChart');
+    var ctx = document.getElementById('total_cases_chart');
     var myLineChart = new Chart(ctx, {
         type: 'line',
         data: {
@@ -77,7 +77,7 @@ function drawDailyCasesChart(casesData) {
     var dailyData = computeDailyCasesData(casesData, 'local');
 
 
-    var ctx = document.getElementById('dailyCasesChart');
+    var ctx = document.getElementById('daily_cases_chart');
     var myLineChart = new Chart(ctx, {
         type: 'bar',
         data: {
@@ -140,7 +140,7 @@ function drawVsWorldTotalCasesChart(casesData) {
 
     var xlabel = ' أيام مرت منذ كانت هناك ' + threshold + ' حالة';
     var title = 'عدد الحالات الكلي';
-    var elementId = 'vsWorldCasesChart';
+    var elementId = 'vs_world_cases_chart';
 
     drawVsWorldChart(elementId, casesData, worldData, xlabel, title);
 }
@@ -151,7 +151,7 @@ function drawVsWorldNormalizedByPopulationChart(casesData) {
 
     var xlabel = ' أيام مرت منذ كانت هناك ' + threshold + ' حالات لكل مليون مواطن ';
     var title = 'عدد الحالات لكل مليون مواطن';
-    var elementId = 'vsWorldPopulationChart';
+    var elementId = 'vs_world_population_chart';
 
     drawVsWorldChart(elementId, casesData, worldData, xlabel, title);
 }
@@ -162,7 +162,7 @@ function drawVsWorldNormalizedByBedsChart(casesData) {
 
     var xlabel = ' أيام مرت منذ كانت هناك ' + threshold + ' حالة لكل سرير ';
     var title = 'عدد الحالات لكل سرير';
-    var elementId = 'vsWorldBedsChart';
+    var elementId = 'vs_world_beds_chart';
 
     drawVsWorldChart(elementId, casesData, worldData, xlabel, title);
 }
@@ -263,7 +263,7 @@ function drawGrowthFactorChart(casesData) {
     meanGrowthFactorArr = meanGrowthFactorArr.concat(growthData['meanGrowthFactorArr']);
 
 
-    var ctx = document.getElementById('growthFactorChart');
+    var ctx = document.getElementById('growth_factor_chart');
     var myLineChart = new Chart(ctx, {
         type: 'line',
         data: {
@@ -319,13 +319,13 @@ function drawGrowthFactorChart(casesData) {
 
     var meanGrowthFactor = growthData['meanGrowthFactor'];
 
-    var div = document.getElementById('meanGrowthFactor');
+    var div = document.getElementById('mean_growth_factor');
     div.innerHTML = meanGrowthFactor.toFixed(2);
 
     if (meanGrowthFactor <= 1) {
-        div.classList.add('colorGreen');
+        div.classList.add('color_green');
     } else {
-        div.classList.add('colorRed');
+        div.classList.add('color_red');
     }
 }
 
@@ -335,32 +335,32 @@ function displayNumbers(casesData) {
     // regular cases
     var growthData = computeGrowthData(casesData, 'local', 'confirmed', numCasesToConsider);
 
-    var div = document.getElementById('daysToDoubleCases');
+    var div = document.getElementById('days_to_double_cases');
     div.innerHTML = growthData['daysToDouble'].toFixed(1);
 
     var cases = casesData['countries']['local']['confirmed'];
-    div = document.getElementById('currentCases');
+    div = document.getElementById('current_cases');
     div.innerHTML = cases[cases.length - 1];
 
-    div = document.getElementById('nextWeekCases');
+    div = document.getElementById('next_week_cases');
     div.innerHTML = growthData['nextPeriodCases'].toFixed(0);
 
     // deaths
     var deathsGrowthData = computeGrowthData(casesData, 'local', 'deaths', numCasesToConsider);
 
-    var div = document.getElementById('daysToDoubleDeaths');
+    var div = document.getElementById('days_to_double_deaths');
     div.innerHTML = deathsGrowthData['daysToDouble'].toFixed(1);
 
     var deaths = casesData['countries']['local']['deaths'];
-    div = document.getElementById('currentDeaths');
+    div = document.getElementById('current_deaths');
     div.innerHTML = deaths[deaths.length - 1];
 
-    div = document.getElementById('nextWeekDeaths');
+    div = document.getElementById('next_week_deaths');
     div.innerHTML = deathsGrowthData['nextPeriodCases'].toFixed(0);
 
     var daysBackForDeathRatio = 7;
     var death_ratio = computeDeathRatio(casesData, 'local', daysBackForDeathRatio);
     
-    div = document.getElementById('deathPercentage');
+    div = document.getElementById('death_percentage');
     div.innerHTML = (death_ratio * 100).toFixed(0) + '%';
 }

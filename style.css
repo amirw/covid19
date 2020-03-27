@@ -2,201 +2,44 @@ body {
     margin: 3rem;
 }
 
-/* Main grid: only rows */
-#wrapper {
-    display: grid;
-    align-items: center;
-    grid-gap: 5rem;
-    grid-template-columns: 1fr;
-}
-
-/* Top row: title */
-#header {
-    grid-row: 1;
-
-    /*margin: auto;*/
+.header {
     align-items: center;
     text-align: center;
 
     background-color: rgb(255, 205, 0);
 }
 
-#doaa {
+.doaa {
     font-size: 2rem;
 }
 
-#pageTitle {
+.page_title {
     font-size: 2rem;
     color: blue;
 }
 
-/* next row: a new grid for numbers */
-#numbers_wrapper_cases {
-    grid-row: 2;
-
-    margin: auto;
-    display: grid;
-    align-items: center;
-    grid-gap: 1rem 10rem;
-}
-
-/* next row: numbers, deaths */
-#numbers_wrapper_deaths {
-    grid-row: 3;
-
-    margin: auto;
-    display: grid;
-    align-items: center;
-    grid-gap: 1rem 10rem;
-}
-
-/* Next row: a new grid for cases charts */
-#cases_wrapper {
-    grid-row: 4;
-
-    display: grid;
-    align-items: center;
-    grid-gap: 10rem;
-}
-
-
-/* Next row: a new grid for vs. world charts */
-#vs_world_wrapper {
-    grid-row: 5;
-
-    display: grid;
-    align-items: center;
-    grid-gap: 1rem 10rem;
-}
-
-#vs_world_title {
-    grid-row: 1;
-    grid-column: 1 / -1;
-    text-align: center;
-}
-
-
-@media (min-width: 1100px) {
-    #numbers_wrapper_cases {
-        grid-template-columns: repeat(4, 1fr);
-    }
-
-    #current_cases_wrapper {
-        grid-column: 4;
-        grid-row: 1;
-    }
-
-    #days_to_double_cases_wrapper {
-        grid-column: 3;
-        grid-row: 1;
-    }
-
-    #next_week_cases_wrapper {
-        grid-column: 2;
-        grid-row: 1;
-    }
-
-    #mean_growth_factor_wrapper {
-        grid-column: 1;
-        grid-row: 1;
-    }
-
-
-    #numbers_wrapper_deaths {
-        grid-template-columns: repeat(4, 1fr);
-    }
-
-    #current_deaths_wrapper {
-        grid-column: 4;
-        grid-row: 2;
-    }
-
-    #days_to_double_deaths_wrapper {
-        grid-column: 3;
-        grid-row: 2;
-    }
-
-    #next_week_deaths_wrapper {
-        grid-column: 2;
-        grid-row: 2;
-    }
-
-    #deaths_percentage_wrapper {
-        grid-column: 1;
-        grid-row: 2;
-    }
-}
-
-@media (min-width: 1400px) {
-    #cases_wrapper {
-        grid-template-columns: repeat(3, 1fr);
-    }
-
-    #total_cases_chart_wrapper {
-        grid-column: 3;
-        grid-row: 1;
-    }
-
-    #daily_cases_chart_wrapper {
-        grid-column: 2;
-        grid-row: 1;
-    }
-
-    #growth_factor_chart_wrapper {
-        grid-column: 1;
-        grid-row: 1;
-    }
-
-
-    #vs_world_wrapper {
-        grid-template-columns: repeat(3, 1fr);
-    }
-
-    #vs_world_cases_wrapper {
-        grid-column: 3;
-        grid-row: 2;
-    }
-
-    #vs_world_population_wrapper {
-        grid-column: 2;
-        grid-row: 2;
-    }
-
-    #vs_world_beds_wrapper {
-        grid-column: 1;
-        grid-row: 2;
-    }
-}
-
-/* chart containers */
-.chart-container {
-    position: relative;
-    width: 99%;
-}
-
-/* classes */
 .component_wrapper {
     text-align: center;
 }
 
-.sectionTitle {
+.section_title {
     font-size: calc(1rem + 1vw);
 }
 
-.bigNumber {
+.big_number {
     font-size: calc(1rem + 6vw);
     height: 100%;
 }
 
-.colorRed {
+.color_red {
     color: red;
 }
 
-.colorGreen {
+.color_green {
     color: green;
 }
 
-.colorBlue {
+.color_blue {
     color: blue;
 }
 
@@ -227,7 +70,6 @@ body {
 .tooltip_wrapper:hover .tooltiptext {
     visibility: visible;
 }
-
 
 p.rtl {
     direction: rtl;

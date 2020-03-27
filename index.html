@@ -21,16 +21,18 @@
     <script src="covid-computations.js"></script>
     <script src="covid-charts.js"></script>
     <link rel="stylesheet" href="style.css?v=0.1" />
+    <link rel="stylesheet" href="style-charts.css?v=0.1" />
+
 </head>
 
 <body>
     <div id="wrapper">
 
-        <div id="header">
-            <p id="doaa">
+        <div id="header" class="header">
+            <p class="doaa">
                 اللهم إنا نعوذ بك من البرص والجنون والجذام وسيء الأسقام
             </p>
-            <p id="pageTitle">
+            <p class="page_title">
                 معلومات حول انتشار وباء الكورونا (كوفيد-١٩) في البلاد
             </p>
         </div>
@@ -38,29 +40,29 @@
         <div id="numbers_wrapper_cases">
 
             <div id="current_cases_wrapper" class="component_wrapper">
-                <div class="sectionTitle">عدد الحالات المجمل</div>
-                <div id="currentCases" class="bigNumber colorBlue"></div>
+                <div class="section_title">عدد الحالات المجمل</div>
+                <div id="current_cases" class="big_number color_nlue"></div>
             </div>
 
             <div id="days_to_double_cases_wrapper" class="component_wrapper">
                 <div class="tooltip_wrapper">
-                    <div class="sectionTitle">أيام حتى مضاعفة عدد الحالات المجمل</div>
+                    <div class="section_title">أيام حتى مضاعفة عدد الحالات المجمل</div>
                     <span class="tooltiptext"> عدد الإصابات يتضاعف كل هذا القدر من الأيام</span>
                 </div>
-                <div id="daysToDoubleCases" class="bigNumber colorBlue"></div>
+                <div id="days_to_double_cases" class="big_number color_blue"></div>
             </div>
 
             <div id="next_week_cases_wrapper" class="component_wrapper">
-                <div class="sectionTitle">عدد الحالات المجمل المتوقع بعد أسبوع</div>
-                <div id="nextWeekCases" class="bigNumber colorBlue"></div>
+                <div class="section_title">عدد الحالات المجمل المتوقع بعد أسبوع</div>
+                <div id="next_week_cases" class="big_number color_blue"></div>
             </div>
 
             <div id="mean_growth_factor_wrapper" class="component_wrapper">
                 <div class="tooltip_wrapper">
-                    <div class="sectionTitle">متوسط عامل النمو في الأسبوع الأخير </div>
+                    <div class="section_title">متوسط عامل النمو في الأسبوع الأخير </div>
                     <span class="tooltiptext"> هذا الرقم يعبر عن سرعة انتشار الوباء. الوباء في تسارع طالما هذا الرقم أكبر من ١ </span>
                 </div>
-                <div id="meanGrowthFactor" class="bigNumber"></div>
+                <div id="mean_growth_factor" class="big_number"></div>
             </div>
 
         </div>
@@ -68,29 +70,29 @@
         <div id="numbers_wrapper_deaths">
 
             <div id="current_deaths_wrapper" class="component_wrapper">
-                <div class="sectionTitle">عدد الوفيات</div>
-                <div id="currentDeaths" class="bigNumber colorRed"></div>
+                <div class="section_title">عدد الوفيات</div>
+                <div id="current_deaths" class="big_number color_red"></div>
             </div>
 
             <div id="days_to_double_deaths_wrapper" class="component_wrapper">
                 <div class="tooltip_wrapper">
-                    <div class="sectionTitle">أيام حتى مضاعفة عدد الوفيات</div>
+                    <div class="section_title">أيام حتى مضاعفة عدد الوفيات</div>
                     <span class="tooltiptext"> عدد الوفيات يتضاعف كل هذا القدر من الأيام</span>
                 </div>
-                <div id="daysToDoubleDeaths" class="bigNumber colorRed"></div>
+                <div id="days_to_double_deaths" class="big_number color_red"></div>
             </div>
 
             <div id="next_week_deaths_wrapper" class="component_wrapper">
-                <div class="sectionTitle">عدد الوفيات المتوقع بعد أسبوع</div>
-                <div id="nextWeekDeaths" class="bigNumber colorRed"></div>
+                <div class="section_title">عدد الوفيات المتوقع بعد أسبوع</div>
+                <div id="next_week_deaths" class="big_number color_red"></div>
             </div>
 
             <div id="deaths_percentage_wrapper" class="component_wrapper">
                 <div class="tooltip_wrapper">
-                    <div class="sectionTitle">نسبة الوفيات *</div>
+                    <div class="section_title">نسبة الوفيات *</div>
                     <span class="tooltiptext">نسبةالوفيات من إجمالي الحالات. النسبة هي بالمقارنة مع إجمالي الحالات قبل أسبوع، لأن الحالات الجديدة لم تظهر نتائجها بعد</span>
                 </div>
-                <div id="deathPercentage" class="bigNumber colorRed"></div>
+                <div id="death_percentage" class="big_number color_red"></div>
             </div>
 
         </div>
@@ -99,27 +101,27 @@
         <div id="cases_wrapper">
 
             <div id="total_cases_chart_wrapper" class="component_wrapper">
-                <div class="sectionTitle">مجمل الحالات في البلاد</div>
-                <div id="totalCasesChartContainer" class="chart-container">
-                    <canvas id="totalCasesChart"></canvas>
+                <div class="section_title">مجمل الحالات في البلاد</div>
+                <div id="total_cases_chart_container" class="chart_container">
+                    <canvas id="total_cases_chart"></canvas>
                 </div>
             </div>
 
             <div id="daily_cases_chart_wrapper" class="component_wrapper">
-                <div class="sectionTitle">حالات جديدة في البلاد</div>
-                <div id="dailyCasesChartContainer" class="chart-container">
-                    <canvas id="dailyCasesChart"></canvas>
+                <div class="section_title">حالات جديدة في البلاد</div>
+                <div id="daily_cases_chart_container" class="chart_container">
+                    <canvas id="daily_cases_chart"></canvas>
                 </div>
             </div>
 
             <div id="growth_factor_chart_wrapper" class="component_wrapper">
                 <div class="tooltip_wrapper">
-                    <div class="sectionTitle">عامل النمو</div>
+                    <div class="section_title">عامل النمو</div>
                     <span class="tooltiptext"> هذا الرقم يعبر عن سرعة انتشار الوباء. الوباء في تسارع طالما هذا الرقم أكبر من ١ </span>
                 </div>
 
-                <div id="growthFactorChartContrainer" class="chart-container">
-                    <canvas id="growthFactorChart"></canvas>
+                <div id="growth_factor_chart_contrainer" class="chart_container">
+                    <canvas id="growth_factor_chart"></canvas>
                 </div>
             </div>
 
@@ -128,23 +130,23 @@
 
         <div id="vs_world_wrapper">
 
-            <div id="vs_world_title" class="sectionTitle">مقارنة مع بلاد أخرى</div>
+            <div id="vs_world_title" class="section_title">مقارنة مع بلاد أخرى</div>
 
             <div id="vs_world_cases_wrapper" class="component_wrapper">
-                <div id="vsWorldCasesChartContainer" class="chart-container">
-                    <canvas id="vsWorldCasesChart"></canvas>
+                <div id="vs_world_cases_chart_container" class="chart_container">
+                    <canvas id="vs_world_cases_chart"></canvas>
                 </div>
             </div>
 
             <div id="vs_world_population_wrapper" class="component_wrapper">
-                <div id="vsWorldPopulationChartContainer" class="chart-container">
-                    <canvas id="vsWorldPopulationChart"></canvas>
+                <div id="vs_world_population_chart_container" class="chart_container">
+                    <canvas id="vs_world_population_chart"></canvas>
                 </div>
             </div>
 
             <div id="vs_world_beds_wrapper" class="component_wrapper">
-                <div id="vsWorldBedsChartContainer" class="chart-container">
-                    <canvas id="vsWorldBedsChart"></canvas>
+                <div id="vs_world_beds_chart_container" class="chart_container">
+                    <canvas id="vs_world_beds_chart"></canvas>
                 </div>
             </div>
 
