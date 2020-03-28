@@ -59,14 +59,26 @@ function drawTotalCasesChart(casesData) {
             },
             scales: {
                 xAxes: [{
+                    ticks: {
+                        fontSize: 16,
+                    }
                 }],
                 yAxes: [{
+                    fontSize: 20,
                     scaleLabel: {
                         display: true,
                         labelString: 'عدد الحالات',
                         fontSize: 20
                     },
+                    ticks: {
+                        fontSize: 16,
+                    }
                 }]
+            },
+            legend: {
+                labels: {
+                    fontSize: 20
+                }
             }
         }
     });
@@ -113,7 +125,10 @@ function drawDailyCasesChart(casesData) {
             },
             scales: {
                 xAxes: [{
-                    stacked: true
+                    stacked: true,
+                    ticks: {
+                        fontSize: 16,
+                    }
                 }],
                 yAxes: [{
                     stacked: true,
@@ -122,7 +137,15 @@ function drawDailyCasesChart(casesData) {
                         labelString: 'عدد الحالات',
                         fontSize: 20
                     },
+                    ticks: {
+                        fontSize: 16,
+                    }
                 }]
+            },
+            legend: {
+                labels: {
+                    fontSize: 20
+                }
             }
         }
     });
@@ -197,7 +220,7 @@ function drawVsWorldChart(elementId, casesData, worldData, xlabel, title) {
             title: {
                 text: title,
                 display: true,
-                fontSize: 20,
+                fontSize: 30,
             },
             scales: {
                 xAxes: [{
@@ -206,8 +229,21 @@ function drawVsWorldChart(elementId, casesData, worldData, xlabel, title) {
                         labelString: xlabel,
                         fontSize: 20
                     },
+                    ticks: {
+                        fontSize: 16,
+                    }
                 }],
+                yAxes: [{
+                    ticks: {
+                        fontSize: 16,
+                    }
+                }]
             },
+            legend: {
+                labels: {
+                    fontSize: 20
+                }
+            }
         }
     });
 }
@@ -292,6 +328,9 @@ function drawGrowthFactorChart(casesData) {
             },
             scales: {
                 xAxes: [{
+                    ticks: {
+                        fontSize: 16,
+                    }
                 }],
                 yAxes: [{
                     scaleLabel: {
@@ -299,7 +338,15 @@ function drawGrowthFactorChart(casesData) {
                         labelString: 'عامل النمو',
                         fontSize: 20
                     },
+                    ticks: {
+                        fontSize: 16,
+                    }
                 }]
+            },
+            legend: {
+                labels: {
+                    fontSize: 20
+                }
             }
         }
     });
