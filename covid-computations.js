@@ -139,20 +139,13 @@ function computeGrowthData(casesData, country, casesType, periodToAverage) {
 
     var growthFactorArr = []
     for (var i = 1; i < dailyCases[casesType].length; i++) {
-        if (dailyCases[casesType][i - 1] == 0) {
-            growthFactorArr[i - 1] = 1;
-        } else {
-            growthFactorArr[i - 1] = dailyCases[casesType][i] / dailyCases[casesType][i - 1];
-        }
+        growthFactorArr[i - 1] = (dailyCases[casesType][i] + 0.1) / (dailyCases[casesType][i - 1] + 0.1); //add 1 to both to avoid 0 and Infinity
     }
 
     var meanGrowthFactorArr = [];
 
     for (var i = 0; i < growthFactorArr.length - periodToAverage + 1; i++) {
         var relevantGrowthFactors = growthFactorArr.slice(i, i + periodToAverage);
-        relevantGrowthFactors = relevantGrowthFactors.filter(function(val) {
-            return (val != 0) && (val != Infinity);
-        });
         meanGrowthFactorArr.push(geometricMean(relevantGrowthFactors));
     }
 

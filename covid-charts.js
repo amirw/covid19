@@ -294,7 +294,7 @@ function drawGrowthFactorChart(casesData) {
             {
                 'label': 'عامل النمو',
                 'fill': false,
-                'borderColor': 'rgb(0, 150, 255)',
+                'borderColor': 'rgb(255, 205, 0)',
                 'lineTension': 0.1,
                 hidden: true,
                 data: growthData['growthFactorData']
@@ -302,13 +302,14 @@ function drawGrowthFactorChart(casesData) {
             {
                 'label': 'عامل النمو المتوسط',
                 'fill': false,
-                'borderColor': 'rgb(255, 205, 0)',
+                'borderColor': 'rgb(0, 150, 255)',
                 'lineTension': 0.1,
                 data: meanGrowthFactorArr
             },
             {
                 'label': 'عامل النمو الحرج',
-                'fill': false,
+                'fill': true,
+                'backgroundColor':'rgb(187, 17, 0, 0.1)',
                 'borderColor':'rgb(187, 17, 0)',
                 'lineTension': 0.1,
                 'pointRadius': 0,
