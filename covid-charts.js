@@ -285,7 +285,6 @@ function drawGrowthFactorChart(casesData) {
     var meanGrowthFactorArr = Array(growthData['growthFactorDataDates'].length - growthData['meanGrowthFactorArr'].length).fill(0);
     meanGrowthFactorArr = meanGrowthFactorArr.concat(growthData['meanGrowthFactorArr']);
 
-
     var ctx = document.getElementById('growth_factor_chart');
     var myLineChart = new Chart(ctx, {
         type: 'line',
@@ -309,7 +308,7 @@ function drawGrowthFactorChart(casesData) {
             {
                 'label': 'عامل النمو الحرج',
                 'fill': true,
-                'backgroundColor':'rgb(187, 17, 0, 0.1)',
+                'backgroundColor': 'rgb(39, 235, 75, 0.1)',
                 'borderColor':'rgb(187, 17, 0)',
                 'lineTension': 0.1,
                 'pointRadius': 0,
@@ -321,7 +320,6 @@ function drawGrowthFactorChart(casesData) {
         },
         options: {
             responsive: true,
-
             title: {
                 text: 'عامل النمو',
                 display: false,
