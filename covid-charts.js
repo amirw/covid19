@@ -91,24 +91,27 @@ function drawDailyCasesChart(casesData) {
 
     var ctx = document.getElementById('daily_cases_chart');
     var myLineChart = new Chart(ctx, {
-        type: 'bar',
+        type: 'line',
         data: {
             datasets: [
             {
                 'label': 'إصابات',
-                'backgroundColor': 'rgb(0, 150, 255, 0.4)',
+                'fill': false,
+                'lineTension': 0.1,
                 'borderColor': 'rgb(0, 150, 255)',
-                data: dailyData['active']
+                data: dailyData['confirmed']
             },
             {
                 'label': 'وفيات',
-                'backgroundColor': 'rgb(187, 17, 0, 0.4)',
+                'fill': false,
+                'lineTension': 0.1,
                 'borderColor': 'rgb(187, 17, 0)',
                 data: dailyData['deaths']
             },
             {
                 'label': 'حالات شفاء',
-                'backgroundColor': 'rgb(39, 235, 75, 0.4)',
+                'fill': false,
+                'lineTension': 0.1,
                 'borderColor': 'rgb(39, 235, 75)',
                 data: dailyData['recovered']
             },
@@ -125,13 +128,11 @@ function drawDailyCasesChart(casesData) {
             },
             scales: {
                 xAxes: [{
-                    stacked: true,
                     ticks: {
                         fontSize: 16,
                     }
                 }],
                 yAxes: [{
-                    stacked: true,
                     scaleLabel: {
                         display: true,
                         labelString: 'عدد الحالات',
