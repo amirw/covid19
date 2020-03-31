@@ -56,6 +56,23 @@ function analyzeData(csvData, present_func) {
 
 function extractCasesData(csvData, casesData) {
 
+    var hardcoded = {
+                     'local': {
+                         'confirmed': {
+                             'startDate': '1/22/20',
+                             'data': [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,2,2,2,2,3,7,7,10,12,12,15,17,21,25,39,50,75,97,109,143,193,213,298,337,433,677,705,883,1071,1442,1930,2369,2693,3035,3619,4247,4695],
+                         },
+                         'recovered': {
+                             'startDate': '1/22/20',
+                             'data': [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,2,2,3,3,4,4,4,4,4,4,4,4,11,11,14,15,36,37,41,53,58,68,79,89,132,161],
+                         },
+                         'deaths': {
+                             'startDate': '1/22/20',
+                             'data': [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,3,5,8,12,12,15,16]
+                         }
+                     }
+    };
+
     var extractDates = true;
     var caseTypes = ['confirmed', 'deaths', 'recovered'];
 
@@ -70,9 +87,24 @@ function extractCasesData(csvData, casesData) {
 
             for (var key in myData[0]) {
                 if (isRelevantDataKey(key)) {
-                    casesData['countries'][country][caseType].push(parseInt(myData[0][key]));
+                    var date = key;
+                    var hardcodedIdx = NaN;
+                    if ((country in hardcoded) && (caseType in hardcoded[country])) { //ugly work around for inaccuracies in JHU's data
+                        var startDateMoment = moment(hardcoded[country][caseType]['startDate'], 'M/D/YY', true);
+                        var thisDateMoment = moment(date, 'M/D/YY', true);
+                        var diff = thisDateMoment.diff(startDateMoment, 'days');
+                        if ((diff >= 0) && (diff < hardcoded[country][caseType]['data'].length)) {
+                            hardcodedIdx = diff;
+                        }
+                    }
+
+                    if (!isNaN(hardcodedIdx)) {
+                        casesData['countries'][country][caseType].push(hardcoded[country][caseType]['data'][hardcodedIdx]);
+                    } else {
+                        casesData['countries'][country][caseType].push(parseInt(myData[0][date]));
+                    }
                     if (extractDates) {
-                        casesData['dates'].push(key);
+                        casesData['dates'].push(date);
                     }
                 }
             }
