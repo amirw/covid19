@@ -151,7 +151,7 @@
 }
 
 /* chart containers */
-.chart-container {
+.chart_container {
     position: relative;
     width: 99%;
 }
