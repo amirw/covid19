@@ -340,6 +340,7 @@ function drawGrowthFactorChart(casesData) {
                     },
                     ticks: {
                         fontSize: 16,
+                        max: 3,
                     }
                 }]
             },
