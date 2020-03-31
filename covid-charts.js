@@ -354,14 +354,25 @@ function drawGrowthFactorChart(casesData) {
 
     var meanGrowthFactor = growthData['meanGrowthFactor'];
 
+    var emoji;
+    var color_class;
+    if (meanGrowthFactor < 0.95) {
+        color_class = 'color_green';
+        emoji = '😃';
+    } else if (meanGrowthFactor <= 1.05) {
+        color_class = 'color_orange';
+        emoji = '😕';
+    } else {
+        color_class = 'color_red';
+        emoji = '😢';
+    };
+
     var div = document.getElementById('mean_growth_factor');
     div.innerHTML = meanGrowthFactor.toFixed(2);
+    div.classList.add(color_class)
 
-    if (meanGrowthFactor <= 1) {
-        div.classList.add('color_green');
-    } else {
-        div.classList.add('color_red');
-    }
+    var div = document.getElementById('mean_growth_factor_emoji');
+    div.innerHTML = emoji;
 }
 
 function displayNumbers(casesData) {

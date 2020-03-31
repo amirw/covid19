@@ -150,6 +150,10 @@
     }
 }
 
+#mean_growth_factor_emoji {
+    font-size: calc(1rem + 2vw);
+}
+
 /* chart containers */
 .chart_container {
     position: relative;
