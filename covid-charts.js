@@ -397,5 +397,5 @@ function displayNumbers(casesData) {
     var death_ratio = computeDeathRatio(casesData, 'local', daysBackForDeathRatio);
     
     div = document.getElementById('death_percentage');
-    div.innerHTML = (death_ratio * 100).toFixed(0) + '%';
+    div.innerHTML = (death_ratio * 100).toFixed(1) + '%';
 }
