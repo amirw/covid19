@@ -51,6 +51,7 @@ function drawTotalCasesChart(casesData) {
         },
         options: {
             responsive: true,
+            maintainAspectRatio: false,
 
             title: {
                 text: 'مجمل الحالات في البلاد',
@@ -120,6 +121,7 @@ function drawDailyCasesChart(casesData) {
         },
         options: {
             responsive: true,
+            maintainAspectRatio: false,
 
             title: {
                 text: 'حالات جديدة في البلاد',
@@ -217,6 +219,7 @@ function drawVsWorldChart(elementId, casesData, worldData, xlabel, title) {
         },
         options: {
             responsive: true,
+            maintainAspectRatio: false,
 
             title: {
                 text: title,
@@ -321,6 +324,7 @@ function drawGrowthFactorChart(casesData) {
         },
         options: {
             responsive: true,
+            maintainAspectRatio: false,
             title: {
                 text: 'عامل النمو',
                 display: false,

@@ -159,3 +159,7 @@
     position: relative;
     width: 99%;
 }
+
+.chart_canvas {
+    height: 400px;
+}
